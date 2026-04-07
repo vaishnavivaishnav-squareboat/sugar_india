@@ -82,7 +82,7 @@ function CityRow({ city, onToggle, onDelete, onPriorityUp, onPriorityDown }) {
           </span>
         </div>
         <p className="text-xs text-[#5C736A] mt-0.5 truncate">
-          {city.country}
+          {[city.state, city.country].filter(Boolean).join(", ")}
           {city.last_processed_at && (
             <span className="ml-2 text-[#9CA3AF]">
               · Last run {new Date(city.last_processed_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
@@ -153,6 +153,7 @@ export function CitiesPanel({ open, onOpenChange }) {
     try {
       const res = await axios.post(`${API}/cities`, {
         name: newCity.city,
+        state: newCity.state || "",
         country: newCity.country || "India",
         priority: cities.length + 1,
       });

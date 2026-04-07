@@ -5,16 +5,35 @@ import { Search, Filter, ChevronUp, ChevronDown, MapPin, Star, Trash2, ExternalL
 
 const API = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
-const SEGMENTS = ["", "Hotel", "Restaurant", "Cafe", 
-  // "Bakery", "CloudKitchen", "Catering", "Mithai", "IceCream"
+const SEGMENTS = [
+  "",
+  // A. Bakery & Confectionery
+  "Bakery",
+  // B. Dairy & Frozen
+  "IceCream",
+  // C. Beverage
+  "Beverage",
+  // D. HORECA
+  "Hotel", "Restaurant", "Cafe", "Catering", "CloudKitchen",
+  // E. Traditional Sweets
+  "Mithai",
+  // F. Food Processing
+  "FoodProcessing",
+  // G. Health / Organic
+  "Organic",
+  // H. Fermentation
+  "Brewery",
 ];
+const SEG_LABELS = { FoodProcessing: "Food Processing", IceCream: "Ice Cream", CloudKitchen: "Cloud Kitchen" };
+const segLabel = (s) => SEG_LABELS[s] || s;
 const PRIORITIES = ["", "High", "Medium", "Low"];
 const STATUSES = ["", "new", "contacted", "qualified", "converted", "lost"];
 
 const segColor = (s) => ({
   Hotel: "#662B01", Restaurant: "#3D6B56", Cafe: "#8FA39A",
-  // Bakery: "#B85C38", CloudKitchen: "#D4956A", Catering: "#6B5E44",
-  // Mithai: "#A0522D", IceCream: "#C4878A"
+  Bakery: "#B85C38", CloudKitchen: "#D4956A", Catering: "#6B5E44",
+  Mithai: "#A0522D", IceCream: "#C4878A",
+  Beverage: "#4A7FA5", FoodProcessing: "#7B6D47", Organic: "#5A8A3C", Brewery: "#7B4F72",
 }[s] || "#5C736A");
 
 const priorityBg = (p) => p === "High" ? "badge-high" : p === "Medium" ? "badge-medium" : "badge-low";
@@ -142,7 +161,7 @@ export default function LeadDatabase() {
             <div>
               <label className="text-xs text-[#5C736A] mb-1 block">Segment</label>
               <select value={filters.segment} onChange={e => setFilter('segment', e.target.value)} className={inputClass + " w-full"} data-testid="filter-segment">
-                {SEGMENTS.map(s => <option key={s} value={s}>{s || "All Segments"}</option>)}
+                {SEGMENTS.map(s => <option key={s} value={s}>{s ? segLabel(s) : "All Segments"}</option>)}
               </select>
             </div>
             <div>

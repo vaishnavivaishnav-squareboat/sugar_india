@@ -2,28 +2,18 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Search, Upload, PlusCircle, CheckSquare, Square, ArrowRight, ChevronDown, Download, MapPin, AlertCircle } from "lucide-react";
-import { CityCombobox } from "@/components/CityCombobox";
 
 const API = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
-const SEGMENTS = ["Hotel", "Restaurant", "Cafe",
-  // "Bakery", "CloudKitchen", "Catering", "Mithai", "IceCream"
-];
 
 const priorityColor = (p) => p === "High" ? "#B85C38" : p === "Medium" ? "#662B01" : "#5C736A";
-const segColor = (s) => ({ Hotel: "#662B01", Restaurant: "#3D6B56", Cafe: "#8FA39A", Bakery: "#B85C38", CloudKitchen: "#D4956A", Catering: "#6B5E44", Mithai: "#A0522D", IceCream: "#C4878A" }[s] || "#5C736A");
+const segColor = (s) => ({
+  Hotel: "#662B01", Restaurant: "#3D6B56", Cafe: "#8FA39A",
+  Bakery: "#B85C38", CloudKitchen: "#D4956A", Catering: "#6B5E44",
+  Mithai: "#A0522D", IceCream: "#C4878A",
+  Beverage: "#4A7FA5", FoodProcessing: "#7B6D47", Organic: "#5A8A3C", Brewery: "#7B4F72",
+}[s] || "#5C736A");
 
-function ScoreBar({ score }) {
-  const color = score >= 70 ? "#627F31" : score >= 40 ? "#B85C38" : "#9CA3AF";
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex-1 h-1.5 bg-[#EDF0EA] rounded-full overflow-hidden" style={{ minWidth: 60 }}>
-        <div className="h-full rounded-full" style={{ width: `${score}%`, backgroundColor: color }} />
-      </div>
-      <span className="text-xs font-semibold" style={{ color }}>{score}</span>
-    </div>
-  );
-}
 
 function TabButton({ active, onClick, children, testId }) {
   return (
@@ -41,9 +31,11 @@ function TabButton({ active, onClick, children, testId }) {
 function DiscoverTab() {
   const [targetCities, setTargetCities] = useState([]);
   const [citiesLoading, setCitiesLoading] = useState(true);
+  const [targetSegments, setTargetSegments] = useState([]);
+  const [segmentsLoading, setSegmentsLoading] = useState(true);
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [segment, setSegment] = useState("Hotel");
+  const [segment, setSegment] = useState("");
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState(new Set());
   const [loading, setLoading] = useState(false);
@@ -57,9 +49,18 @@ function DiscoverTab() {
       setTargetCities(active);
       if (active.length > 0) {
         setCity(active[0].name);
-        setState("");  // state not stored in City model, will be sent as empty
+        setState(active[0].state || "");
       }
     }).catch(() => {}).finally(() => setCitiesLoading(false));
+  }, []);
+
+  // Fetch active target segments from backend
+  useEffect(() => {
+    axios.get(`${API}/segments`).then(res => {
+      const active = (res.data || []).filter(s => s.is_active);
+      setTargetSegments(active);
+      if (active.length > 0) setSegment(active[0].key);
+    }).catch(() => {}).finally(() => setSegmentsLoading(false));
   }, []);
 
   const handleSearch = async () => {
@@ -133,8 +134,9 @@ function DiscoverTab() {
                 data-testid="discover-city-select"
                 value={city}
                 onChange={e => {
+                  const selected = targetCities.find(c => c.name === e.target.value);
                   setCity(e.target.value);
-                  setState("");
+                  setState(selected?.state || "");
                 }}
                 className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#627F31]"
               >
@@ -147,22 +149,38 @@ function DiscoverTab() {
 
           {/* Segment */}
           <div className="flex-1 min-w-[160px]">
-            <label className="text-xs text-[#5C736A] mb-1 block">Segment</label>
-            <select
-              data-testid="discover-segment-select"
-              value={segment}
-              onChange={e => setSegment(e.target.value)}
-              className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#627F31]"
-            >
-              {SEGMENTS.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
+            <label className="text-xs text-[#5C736A] mb-1 block">
+              Segment
+              {!segmentsLoading && targetSegments.length > 0 && (
+                <span className="ml-1.5 text-[#9CA3AF] font-normal">({targetSegments.length} active)</span>
+              )}
+            </label>
+            {segmentsLoading ? (
+              <div className="w-full h-9 bg-white border border-[#DCE1D9] rounded-md animate-pulse" />
+            ) : targetSegments.length === 0 ? (
+              <div className="w-full border border-dashed border-[#DCE1D9] rounded-md px-3 py-2 text-sm text-[#9CA3AF] bg-white flex items-center gap-2">
+                <span className="text-[#DCE1D9]">⬡</span>
+                <span>No active segments — configure in <strong>Pipeline → Target Segments</strong></span>
+              </div>
+            ) : (
+              <select
+                data-testid="discover-segment-select"
+                value={segment}
+                onChange={e => setSegment(e.target.value)}
+                className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+              >
+                {targetSegments.map(s => (
+                  <option key={s.id} value={s.key}>{s.label}</option>
+                ))}
+              </select>
+            )}
           </div>
 
           <div className="flex-1 min-w-[160px] self-end">
             <button
               data-testid="discover-search-btn"
               onClick={handleSearch}
-              disabled={loading || !city}
+              disabled={loading || !city || !segment}
               className="w-full flex items-center justify-center gap-2 px-5 py-2 rounded-md text-white text-sm font-medium disabled:opacity-60 transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#662B01" }}
             >
@@ -265,13 +283,27 @@ function CSVTab() {
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [dragOver, setDragOver] = useState(false);
+  const [targetCities, setTargetCities] = useState([]);
+  const [targetSegments, setTargetSegments] = useState([]);
+  const [refLoading, setRefLoading] = useState(true);
   const fileRef = useRef();
+
+  // Fetch active cities & segments for the reference panel
+  useEffect(() => {
+    Promise.all([
+      axios.get(`${API}/cities`),
+      axios.get(`${API}/segments`),
+    ]).then(([cr, sr]) => {
+      setTargetCities((cr.data || []).filter(c => c.is_active));
+      setTargetSegments((sr.data || []).filter(s => s.is_active));
+    }).catch(() => {}).finally(() => setRefLoading(false));
+  }, []);
 
   const handleDrop = (e) => {
     e.preventDefault();
     setDragOver(false);
     const f = e.dataTransfer.files[0];
-    if (f && f.name.endsWith('.csv')) setFile(f);
+    if (f && (f.name.endsWith('.csv') || f.name.endsWith('.xlsx'))) setFile(f);
   };
 
   const handleUpload = async () => {
@@ -295,13 +327,13 @@ function CSVTab() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[#5C736A]">Upload a CSV file with your HORECA leads</p>
+        <p className="text-sm text-[#5C736A]">Upload a CSV / Excel file with your HORECA leads</p>
         <button
           data-testid="download-template-btn"
           onClick={downloadTemplate}
           className="flex items-center gap-1.5 text-sm text-[#627F31] hover:opacity-70 font-medium border border-[#DCE1D9] px-3 py-1.5 rounded-md"
         >
-          <Download size={13} /> Download Template
+          <Download size={13} /> Download Template (.xlsx)
         </button>
       </div>
 
@@ -317,7 +349,7 @@ function CSVTab() {
           backgroundSize: 'cover', backgroundPosition: 'center', backgroundBlendMode: 'overlay'
         }}
       >
-        <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={e => setFile(e.target.files[0])} />
+        <input ref={fileRef} type="file" accept=".csv,.xlsx" className="hidden" onChange={e => setFile(e.target.files[0])} />
         <Upload size={32} className="mx-auto mb-3 text-[#627F31] opacity-70" strokeWidth={1.5} />
         {file ? (
           <div>
@@ -326,8 +358,8 @@ function CSVTab() {
           </div>
         ) : (
           <div>
-            <p className="font-semibold text-[#16221E]">Drop CSV file here or click to browse</p>
-            <p className="text-sm text-[#5C736A] mt-1">Supports .csv format</p>
+            <p className="font-semibold text-[#16221E]">Drop CSV or Excel file here or click to browse</p>
+            <p className="text-sm text-[#5C736A] mt-1">Supports .csv and .xlsx formats</p>
           </div>
         )}
       </div>
@@ -362,27 +394,111 @@ function CSVTab() {
         </div>
       )}
 
-      {/* CSV Format guide */}
-      <div className="bg-white border border-[#DCE1D9] rounded-lg p-4">
-        <p className="text-xs font-semibold text-[#627F31] uppercase tracking-widest mb-3" style={{ letterSpacing: '0.1em' }}>CSV Column Guide</p>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-1">
-          {[
-            ["business_name*", "Business name"],
-            ["city*", "City name"],
-            ["segment", "Hotel/Restaurant/Cafe/Bakery..."],
-            ["tier", "1=Metro, 2=Tier2, 3=Tier3"],
-            ["rating", "0.0 to 5.0"],
-            ["num_outlets", "Number of outlets"],
-            ["hotel_category", "3-star/4-star/5-star"],
-            ["is_chain", "true/false"],
-            ["has_dessert_menu", "true/false"],
-            ["decision_maker_name", "Contact person name"],
-          ].map(([col, desc]) => (
-            <div key={col} className="flex gap-2">
-              <code className="text-xs text-[#B85C38] font-mono">{col}</code>
-              <span className="text-xs text-[#5C736A]">— {desc}</span>
+      {/* Live reference: Active Cities & Segments */}
+      <div className="bg-white border border-[#DCE1D9] rounded-lg overflow-hidden">
+        <div className="px-4 py-3 bg-[#F8F9F6] border-b border-[#EDF0EA] flex items-center justify-between">
+          <p className="text-xs font-semibold text-[#627F31] uppercase tracking-widest" style={{ letterSpacing: '0.1em' }}>
+            Valid Values Reference
+          </p>
+          <p className="text-[10px] text-[#9CA3AF]">These exact values are pre-loaded as dropdowns in the .xlsx template</p>
+        </div>
+
+        {refLoading ? (
+          <div className="p-4 space-y-3">
+            <div className="h-4 bg-[#EDF0EA] rounded animate-pulse w-1/4 mb-2" />
+            <div className="flex flex-wrap gap-1.5">
+              {[1,2,3,4].map(i => <div key={i} className="h-6 w-20 bg-[#EDF0EA] rounded-full animate-pulse" />)}
             </div>
-          ))}
+            <div className="h-4 bg-[#EDF0EA] rounded animate-pulse w-1/4 mb-2 mt-3" />
+            <div className="flex flex-wrap gap-1.5">
+              {[1,2,3,4,5].map(i => <div key={i} className="h-6 w-16 bg-[#EDF0EA] rounded-full animate-pulse" />)}
+            </div>
+          </div>
+        ) : (
+          <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Cities */}
+            <div>
+              <p className="text-xs font-semibold text-[#16221E] mb-2 flex items-center gap-1.5">
+                <MapPin size={11} className="text-[#627F31]" />
+                city column
+                <span className="font-normal text-[#9CA3AF]">({targetCities.length} active)</span>
+              </p>
+              {targetCities.length === 0 ? (
+                <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded px-3 py-2">
+                  No active cities — configure via <strong>Pipeline → Target Cities</strong>
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {targetCities.map(c => (
+                    <span
+                      key={c.id}
+                      className="text-xs px-2.5 py-1 rounded-full border font-medium"
+                      style={{ backgroundColor: '#EDF0EA', color: '#3D6B56', borderColor: '#C8D8C0' }}
+                      title={c.state ? `${c.name}, ${c.state}` : c.name}
+                    >
+                      {c.name}
+                      {c.state && <span className="ml-1 opacity-60 font-normal text-[10px]">({c.state})</span>}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Segments */}
+            <div>
+              <p className="text-xs font-semibold text-[#16221E] mb-2 flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#627F31] inline-block" />
+                segment column
+                <span className="font-normal text-[#9CA3AF]">({targetSegments.length} active)</span>
+              </p>
+              {targetSegments.length === 0 ? (
+                <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded px-3 py-2">
+                  No active segments — configure via <strong>Pipeline → Target Segments</strong>
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {targetSegments.map(s => (
+                    <span
+                      key={s.id}
+                      className="text-xs px-2.5 py-1 rounded-full font-medium text-white"
+                      style={{ backgroundColor: s.color || '#5C736A' }}
+                    >
+                      {s.key}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Static column guide */}
+        <div className="px-4 pb-4">
+          <p className="text-xs font-semibold text-[#627F31] uppercase tracking-widest mb-2 mt-1" style={{ letterSpacing: '0.1em' }}>Other Columns</p>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+            {[
+              ["business_name*", "Business name (required)"],
+              ["address",        "Full address of the business"],
+              ["website",        "Website URL"],
+              ["phone",          "Contact phone number"],
+              ["email",          "Contact email address"],
+              ["tier",           "1 = Metro, 2 = Tier 2, 3 = Tier 3"],
+              ["rating",         "0.0 – 5.0"],
+              ["num_outlets",    "Number of outlets"],
+              ["hotel_category", "3-star / 4-star / 5-star"],
+              ["is_chain",       "true / false"],
+              ["has_dessert_menu","true / false"],
+              ["monthly_volume_estimate", "e.g. 500-800 kg"],
+              ["decision_maker_name", "Contact person name"],
+              ["decision_maker_role", "e.g. Procurement Manager"],
+              ["decision_maker_linkedin", "LinkedIn profile URL"],
+            ].map(([col, desc]) => (
+              <div key={col} className="flex gap-2">
+                <code className="text-xs text-[#B85C38] font-mono shrink-0">{col}</code>
+                <span className="text-xs text-[#5C736A]">— {desc}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -391,8 +507,12 @@ function CSVTab() {
 
 // ─── Manual Entry Tab ─────────────────────────────────────────────────────────
 function ManualTab() {
+  const [targetCities, setTargetCities] = useState([]);
+  const [targetSegments, setTargetSegments] = useState([]);
+  const [configLoading, setConfigLoading] = useState(true);
+
   const [form, setForm] = useState({
-    business_name: "", segment: "Restaurant", city: "", state: "", country: "India",
+    business_name: "", segment: "", city: "", state: "", country: "India",
     tier: 1, address: "", phone: "", email: "", website: "",
     rating: 0, num_outlets: 1, decision_maker_name: "", decision_maker_role: "",
     decision_maker_linkedin: "", has_dessert_menu: false, hotel_category: "",
@@ -401,6 +521,25 @@ function ManualTab() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const navigate = useNavigate();
+
+  // Fetch active cities & segments from the pipeline config
+  useEffect(() => {
+    Promise.all([
+      axios.get(`${API}/cities`),
+      axios.get(`${API}/segments`),
+    ]).then(([citiesRes, segsRes]) => {
+      const cities = (citiesRes.data || []).filter(c => c.is_active);
+      const segs   = (segsRes.data  || []).filter(s => s.is_active);
+      setTargetCities(cities);
+      setTargetSegments(segs);
+      setForm(f => ({
+        ...f,
+        city:    cities.length > 0 ? cities[0].name  : "",
+        state:   cities.length > 0 ? (cities[0].state || "") : "",
+        segment: segs.length   > 0 ? segs[0].key     : "",
+      }));
+    }).catch(() => {}).finally(() => setConfigLoading(false));
+  }, []);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -416,44 +555,94 @@ function ManualTab() {
   };
 
   const inputClass = "w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#627F31]";
+  const skeletonClass = "w-full h-9 bg-[#EDF0EA] border border-[#DCE1D9] rounded-md animate-pulse";
   const labelClass = "text-xs text-[#5C736A] mb-1 block";
+
+  // Warning banner if pipeline config is missing
+  const noCities   = !configLoading && targetCities.length === 0;
+  const noSegments = !configLoading && targetSegments.length === 0;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5" data-testid="manual-entry-form">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="col-span-2 md:col-span-1">
+
+      {/* Config warning */}
+      {(noCities || noSegments) && (
+        <div className="flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+          <AlertCircle size={15} className="text-amber-500 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-amber-700">
+            {noCities && noSegments
+              ? <>No target cities or segments configured. Go to <strong>Pipeline → Target Cities</strong> and <strong>Target Segments</strong> in the sidebar first.</>
+              : noCities
+              ? <>No active cities. Go to <strong>Pipeline → Target Cities</strong> to add some.</>
+              : <>No active segments. Go to <strong>Pipeline → Target Segments</strong> to enable some.</>}
+          </p>
+        </div>
+      )}
+
+      <div className="grid grid-cols-3 gap-4">
+
+        {/* Row 1: Business Name (2 cols) + Segment (1 col) */}
+        <div className="col-span-2">
           <label className={labelClass}>Business Name *</label>
           <input data-testid="manual-business-name" required value={form.business_name} onChange={e => set('business_name', e.target.value)} className={inputClass} placeholder="e.g. The Grand Palace Hotel" />
         </div>
         <div>
-          <label className={labelClass}>Segment</label>
-          <select data-testid="manual-segment" value={form.segment} onChange={e => set('segment', e.target.value)} className={inputClass}>
-            {SEGMENTS.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
+          <label className={labelClass}>
+            Segment
+            {!configLoading && targetSegments.length > 0 && (
+              <span className="ml-1.5 text-[#9CA3AF] font-normal">({targetSegments.length} active)</span>
+            )}
+          </label>
+          {configLoading ? <div className={skeletonClass} /> : targetSegments.length === 0 ? (
+            <div className="w-full border border-dashed border-[#DCE1D9] rounded-md px-3 py-2 text-sm text-[#9CA3AF] bg-white">
+              No segments — configure in Pipeline
+            </div>
+          ) : (
+            <select data-testid="manual-segment" value={form.segment} onChange={e => set('segment', e.target.value)} className={inputClass}>
+              {targetSegments.map(s => <option key={s.id} value={s.key}>{s.label}</option>)}
+            </select>
+          )}
         </div>
+
+        {/* Row 2: City + State + Country */}
         <div>
-          <label className={labelClass}>City *</label>
-          <CityCombobox
-            value={form.city}
-            onChange={({ city, state, country }) => {
-              set('city', city);
-              set('state', state);
-              set('country', country);
-            }}
-            placeholder="Search & select city…"
-            testId="manual-city"
-          />
+          <label className={labelClass}>
+            City *
+            {!configLoading && targetCities.length > 0 && (
+              <span className="ml-1.5 text-[#9CA3AF] font-normal">({targetCities.length} {targetCities.length === 1 ? "city" : "cities"})</span>
+            )}
+          </label>
+          {configLoading ? <div className={skeletonClass} /> : targetCities.length === 0 ? (
+            <div className="w-full border border-dashed border-[#DCE1D9] rounded-md px-3 py-2 text-sm text-[#9CA3AF] bg-white flex items-center gap-2">
+              <MapPin size={13} className="text-[#DCE1D9]" />
+              No active cities
+            </div>
+          ) : (
+            <select
+              data-testid="manual-city"
+              value={form.city}
+              onChange={e => {
+                const selected = targetCities.find(c => c.name === e.target.value);
+                set('city', e.target.value);
+                set('state', selected?.state || "");
+              }}
+              className={inputClass}
+            >
+              {targetCities.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+            </select>
+          )}
         </div>
         <div>
           <label className={labelClass}>
             State
-            {form.city && <span className="ml-1 text-[#9CA3AF] font-normal">(auto-filled)</span>}
+            {form.state && <span className="ml-1.5 text-[#9CA3AF] font-normal">(auto-filled)</span>}
           </label>
           <input
             value={form.state}
+            readOnly={!!form.state}
             onChange={e => set('state', e.target.value)}
-            className={inputClass}
-            placeholder="Maharashtra"
+            className={inputClass + (form.state ? " bg-[#F8F9F6] text-[#5C736A] cursor-default" : "")}
+            placeholder="e.g. Maharashtra"
           />
         </div>
         <div>
@@ -464,21 +653,11 @@ function ManualTab() {
             className={inputClass + " bg-[#F8F9F6] text-[#5C736A] cursor-default select-none"}
           />
         </div>
+
+        {/* Row 3: Rating + Hotel Category + Number of Outlets */}
         <div>
-          <label className={labelClass}>City Tier</label>
-          <select value={form.tier} onChange={e => set('tier', Number(e.target.value))} className={inputClass}>
-            <option value={1}>Tier 1 (Metro)</option>
-            <option value={2}>Tier 2</option>
-            <option value={3}>Tier 3</option>
-          </select>
-        </div>
-        <div>
-          <label className={labelClass}>Rating (0-5)</label>
+          <label className={labelClass}>Rating (0–5)</label>
           <input type="number" min={0} max={5} step={0.1} value={form.rating} onChange={e => set('rating', parseFloat(e.target.value))} className={inputClass} />
-        </div>
-        <div>
-          <label className={labelClass}>Number of Outlets</label>
-          <input type="number" min={1} value={form.num_outlets} onChange={e => set('num_outlets', parseInt(e.target.value))} className={inputClass} />
         </div>
         <div>
           <label className={labelClass}>Hotel Category</label>
@@ -490,6 +669,22 @@ function ManualTab() {
           </select>
         </div>
         <div>
+          <label className={labelClass}>Number of Outlets</label>
+          <input type="number" min={1} value={form.num_outlets} onChange={e => set('num_outlets', parseInt(e.target.value))} className={inputClass} />
+        </div>
+
+        
+
+        {/* Row 4: City Tier + Phone + Email */}
+        <div>
+          <label className={labelClass}>City Tier</label>
+          <select value={form.tier} onChange={e => set('tier', Number(e.target.value))} className={inputClass}>
+            <option value={1}>Tier 1 (Metro)</option>
+            <option value={2}>Tier 2</option>
+            <option value={3}>Tier 3</option>
+          </select>
+        </div>
+        <div>
           <label className={labelClass}>Phone</label>
           <input value={form.phone} onChange={e => set('phone', e.target.value)} className={inputClass} placeholder="+91-9876543210" />
         </div>
@@ -497,6 +692,14 @@ function ManualTab() {
           <label className={labelClass}>Email</label>
           <input type="email" value={form.email} onChange={e => set('email', e.target.value)} className={inputClass} placeholder="procurement@hotel.com" />
         </div>
+
+        {/* Row 5: Address (full width) */}
+        <div className="col-span-3">
+          <label className={labelClass}>Address</label>
+          <input value={form.address} onChange={e => set('address', e.target.value)} className={inputClass} placeholder="e.g. 12, MG Road, Andheri East, Mumbai - 400069" />
+        </div>
+
+        {/* Row 6: Decision Maker Name + Role */}
         <div>
           <label className={labelClass}>Decision Maker Name</label>
           <input value={form.decision_maker_name} onChange={e => set('decision_maker_name', e.target.value)} className={inputClass} placeholder="Rajesh Kumar" />
@@ -505,10 +708,14 @@ function ManualTab() {
           <label className={labelClass}>Decision Maker Role</label>
           <input value={form.decision_maker_role} onChange={e => set('decision_maker_role', e.target.value)} className={inputClass} placeholder="Procurement Manager" />
         </div>
-        <div className="col-span-2">
+
+        {/* Row 7: LinkedIn (full width) */}
+        <div className="col-span-3">
           <label className={labelClass}>LinkedIn URL</label>
           <input value={form.decision_maker_linkedin} onChange={e => set('decision_maker_linkedin', e.target.value)} className={inputClass} placeholder="linkedin.com/in/rajesh-kumar" />
         </div>
+
+        {/* Row 8: Checkboxes */}
         <div className="flex items-center gap-3">
           <input type="checkbox" id="dessert" checked={form.has_dessert_menu} onChange={e => set('has_dessert_menu', e.target.checked)} className="w-4 h-4 accent-[#627F31]" />
           <label htmlFor="dessert" className="text-sm text-[#16221E]">Has Dessert/Sweet Menu</label>

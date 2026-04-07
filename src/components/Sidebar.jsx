@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Search, Database, Mail, Leaf, TrendingUp, Users, MapPin } from "lucide-react";
+import { LayoutDashboard, Search, Database, Mail, Leaf, TrendingUp, Users, MapPin, Layers } from "lucide-react";
 import { CitiesPanel } from "./CitiesPanel";
+import { SegmentsPanel } from "./SegmentsPanel";
 
 const navItems = [
   { path: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -13,6 +14,7 @@ const navItems = [
 export default function Sidebar() {
   const location = useLocation();
   const [citiesOpen, setCitiesOpen] = useState(false);
+  const [segmentsOpen, setSegmentsOpen] = useState(false);
 
   return (
     <aside
@@ -66,6 +68,14 @@ export default function Sidebar() {
             <MapPin size={17} strokeWidth={1.5} />
             Target Cities
           </button>
+          <button
+            data-testid="nav-pipeline-segments"
+            onClick={() => setSegmentsOpen(true)}
+            className="sidebar-nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-white/65 hover:text-white transition-colors"
+          >
+            <Layers size={17} strokeWidth={1.5} />
+            Target Segments
+          </button>
         </div>
       </nav>
 
@@ -99,6 +109,8 @@ export default function Sidebar() {
 
       {/* Cities slide-over panel */}
       <CitiesPanel open={citiesOpen} onOpenChange={setCitiesOpen} />
+      {/* Segments slide-over panel */}
+      <SegmentsPanel open={segmentsOpen} onOpenChange={setSegmentsOpen} />
     </aside>
   );
 }
