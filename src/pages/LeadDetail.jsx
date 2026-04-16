@@ -59,6 +59,7 @@ export default function LeadDetail() {
   const [qualifying, setQualifying] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState(null);
   const [generating, setGenerating] = useState(false);
+  const [generateError, setGenerateError] = useState("");
   const [copied, setCopied] = useState(null);
   const [activeEmail, setActiveEmail] = useState(null);
 
@@ -89,12 +90,14 @@ export default function LeadDetail() {
 
   const handleGenerateEmail = async () => {
     setGenerating(true);
+    setGenerateError("");
     try {
       const res = await axios.post(`${API}/leads/${id}/generate-email`);
       setEmails(prev => [res.data, ...prev]);
       setActiveEmail(res.data);
     } catch (err) {
-      alert("Email generation failed. Check API key.");
+      const msg = err?.response?.data?.detail || err.message || "Email generation failed.";
+      setGenerateError(msg);
     }
     setGenerating(false);
   };
@@ -223,30 +226,71 @@ export default function LeadDetail() {
             </div>
           </div>
 
-          {/* Decision Maker */}
+          {/* Contacts */}
           <div className="bg-white border border-[#DCE1D9] rounded-xl p-4">
-            <p className="text-xs uppercase tracking-widest text-[#5C736A] mb-3" style={{ letterSpacing: '0.15em' }}>Decision Maker</p>
-            {lead.decision_maker_name ? (
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#EDF0EA] flex items-center justify-center text-sm font-bold text-[#627F31]">
-                    {lead.decision_maker_name.charAt(0)}
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs uppercase tracking-widest text-[#5C736A]" style={{ letterSpacing: '0.15em' }}>Contacts</p>
+              {lead.contacts?.length > 0 && (
+                <span className="text-xs bg-[#EDF0EA] text-[#5C736A] px-2 py-0.5 rounded-full">{lead.contacts.length}</span>
+              )}
+            </div>
+            {lead.contacts?.length > 0 ? (
+              <div className="space-y-4">
+                {[...lead.contacts].sort((a, b) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0)).map((c, idx) => (
+                  <div key={c.id ?? idx} className={`space-y-2 ${idx > 0 ? "pt-3 border-t border-[#F4F5F0]" : ""}`}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-[#EDF0EA] flex items-center justify-center text-sm font-bold text-[#627F31] flex-shrink-0">
+                        {c.name?.charAt(0)?.toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <p className="font-medium text-sm text-[#16221E]">{c.name}</p>
+                          {c.is_primary && (
+                            <span className="text-xs px-1.5 py-0.5 rounded bg-[#627F31]/10 text-[#627F31] font-medium">Primary</span>
+                          )}
+                        </div>
+                        {c.role && <p className="text-xs text-[#5C736A]">{c.role}</p>}
+                        {c.department && <p className="text-xs text-[#9CA3AF]">{c.department}</p>}
+                      </div>
+                    </div>
+                    <div className="space-y-1 pl-12">
+                      {c.email && (
+                        <div className="flex items-center gap-1.5">
+                          <Mail size={12} className="text-[#5C736A] flex-shrink-0" />
+                          <a href={`mailto:${c.email}`} className="text-xs text-[#627F31] hover:underline truncate">{c.email}</a>
+                        </div>
+                      )}
+                      {c.email_2 && (
+                        <div className="flex items-center gap-1.5">
+                          <Mail size={12} className="text-[#9CA3AF] flex-shrink-0" />
+                          <a href={`mailto:${c.email_2}`} className="text-xs text-[#9CA3AF] hover:underline truncate">{c.email_2}</a>
+                        </div>
+                      )}
+                      {c.phone && (
+                        <div className="flex items-center gap-1.5">
+                          <Phone size={12} className="text-[#5C736A] flex-shrink-0" />
+                          <a href={`tel:${c.phone}`} className="text-xs text-[#627F31] hover:underline">{c.phone}</a>
+                        </div>
+                      )}
+                      {c.phone_2 && (
+                        <div className="flex items-center gap-1.5">
+                          <Phone size={12} className="text-[#9CA3AF] flex-shrink-0" />
+                          <a href={`tel:${c.phone_2}`} className="text-xs text-[#9CA3AF] hover:underline">{c.phone_2}</a>
+                        </div>
+                      )}
+                      {c.linkedin_url && (
+                        <a
+                          href={c.linkedin_url.startsWith('http') ? c.linkedin_url : `https://${c.linkedin_url}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1.5 text-xs text-[#627F31] hover:opacity-70"
+                        >
+                          <Linkedin size={12} /> LinkedIn Profile
+                        </a>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-sm text-[#16221E]">{lead.decision_maker_name}</p>
-                    <p className="text-xs text-[#5C736A]">{lead.decision_maker_role}</p>
-                  </div>
-                </div>
-                {lead.decision_maker_linkedin && (
-                  <a
-                    href={`https://${lead.decision_maker_linkedin}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-1.5 text-xs text-[#627F31] hover:opacity-70"
-                  >
-                    <Linkedin size={13} /> View LinkedIn Profile
-                  </a>
-                )}
+                ))}
               </div>
             ) : (
               <p className="text-sm text-[#9CA3AF]">No contact info available</p>
@@ -356,6 +400,12 @@ export default function LeadDetail() {
                 <><Zap size={15} /> Generate AI Email</>
               )}
             </button>
+
+            {generateError && (
+              <div className="mb-4 px-3 py-2 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 leading-snug">
+                ⚠ {generateError}
+              </div>
+            )}
 
             {emails.length > 0 && (
               <div className="space-y-2">

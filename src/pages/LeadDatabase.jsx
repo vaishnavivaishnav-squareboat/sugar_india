@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Search, Filter, ChevronUp, ChevronDown, MapPin, Star, Trash2, ExternalLink } from "lucide-react";
 
 const API = `${import.meta.env.VITE_BACKEND_URL}/api`;
+const PAGE_SIZE = 25;
 
 const SEGMENTS = [
   "",
@@ -62,22 +63,30 @@ export default function LeadDatabase() {
   const [leads, setLeads] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({ city: "", segment: "", priority: "", status: "", min_score: "" });
   const [showFilters, setShowFilters] = useState(false);
-  const [sortField, setSortField] = useState("ai_score");
+  const [sortField, setSortField] = useState("created_at");
   const [sortDir, setSortDir] = useState("desc");
   const navigate = useNavigate();
 
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
   const fetchLeads = async () => {
     setLoading(true);
-    const params = { search, ...Object.fromEntries(Object.entries(filters).filter(([, v]) => v !== "")) };
+    const params = {
+      search,
+      skip: (page - 1) * PAGE_SIZE,
+      limit: PAGE_SIZE,
+      ...Object.fromEntries(Object.entries(filters).filter(([, v]) => v !== ""))
+    };
     const res = await axios.get(`${API}/leads`, { params });
     let data = res.data.leads || [];
-    // Client-side sort
+    // Client-side sort within the current page
     data = data.sort((a, b) => {
-      let av = a[sortField], bv = b[sortField];
-      if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+      let av = a[sortField] ?? "", bv = b[sortField] ?? "";
+      if (typeof av === 'string') { av = av.toLowerCase(); bv = String(bv).toLowerCase(); }
       return sortDir === "asc" ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
     });
     setLeads(data);
@@ -85,7 +94,10 @@ export default function LeadDatabase() {
     setLoading(false);
   };
 
-  useEffect(() => { fetchLeads(); }, [search, filters, sortField, sortDir]);
+  // Reset to page 1 when search/filters change
+  useEffect(() => { setPage(1); }, [search, filters]);
+
+  useEffect(() => { fetchLeads(); }, [page, search, filters, sortField, sortDir]);
 
   const toggleSort = (field) => {
     if (sortField === field) setSortDir(d => d === "asc" ? "desc" : "asc");
@@ -106,7 +118,7 @@ export default function LeadDatabase() {
   };
 
   const setFilter = (k, v) => setFilters(f => ({ ...f, [k]: v }));
-  const clearFilters = () => setFilters({ city: "", segment: "", priority: "", status: "", min_score: "" });
+  const clearFilters = () => { setFilters({ city: "", segment: "", priority: "", status: "", min_score: "" }); setPage(1); };
 
   const SortIcon = ({ field }) => sortField === field
     ? (sortDir === "asc" ? <ChevronUp size={13} /> : <ChevronDown size={13} />)
@@ -197,6 +209,7 @@ export default function LeadDatabase() {
             <table className="w-full text-sm" data-testid="leads-table">
               <thead>
                 <tr className="border-b border-[#EDF0EA] bg-[#F8F9F6]">
+                  <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#5C736A] w-10">#</th>
                   {[
                     { label: "Business", field: "business_name" },
                     { label: "Location", field: "city" },
@@ -226,6 +239,9 @@ export default function LeadDatabase() {
                     className="lead-row border-b border-[#F4F5F0] last:border-0"
                     onClick={() => navigate(`/leads/${lead.id}`)}
                   >
+                    <td className="px-3 py-3 text-xs text-[#9CA3AF] w-10 select-none">
+                      {(page - 1) * PAGE_SIZE + i + 1}
+                    </td>
                     <td className="px-3 py-3">
                       <div>
                         <p className="font-medium text-[#16221E] truncate max-w-[200px]">{lead.business_name}</p>
@@ -261,12 +277,16 @@ export default function LeadDatabase() {
                       </select>
                     </td>
                     <td className="px-3 py-3">
-                      {lead.decision_maker_name ? (
-                        <div>
-                          <p className="text-xs text-[#16221E]">{lead.decision_maker_name}</p>
-                          <p className="text-xs text-[#9CA3AF]">{lead.decision_maker_role}</p>
-                        </div>
-                      ) : <span className="text-xs text-[#9CA3AF]">—</span>}
+                      {(() => {
+                        const c = lead.contacts?.find(x => x.is_primary) || lead.contacts?.[0];
+                        return c ? (
+                          <div>
+                            <p className="text-xs font-medium text-[#16221E]">{c.name}</p>
+                            <p className="text-xs text-[#9CA3AF]">{c.role || c.department || "—"}</p>
+                            {c.email && <p className="text-xs text-[#627F31] truncate max-w-[160px]">{c.email}</p>}
+                          </div>
+                        ) : <span className="text-xs text-[#9CA3AF]">—</span>;
+                      })()}
                     </td>
                     <td className="px-3 py-3">
                       <div className="flex items-center gap-1">
@@ -301,6 +321,59 @@ export default function LeadDatabase() {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {!loading && total > PAGE_SIZE && (
+        <div className="flex items-center justify-between mt-4 px-1">
+          <p className="text-xs text-[#5C736A]">
+            Showing {Math.min((page - 1) * PAGE_SIZE + 1, total)}–{Math.min(page * PAGE_SIZE, total)} of {total} leads
+          </p>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setPage(1)}
+              disabled={page === 1}
+              className="px-2 py-1 rounded text-xs border border-[#DCE1D9] text-[#5C736A] hover:bg-[#EDF0EA] disabled:opacity-40 disabled:cursor-not-allowed"
+            >«</button>
+            <button
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="px-2.5 py-1 rounded text-xs border border-[#DCE1D9] text-[#5C736A] hover:bg-[#EDF0EA] disabled:opacity-40 disabled:cursor-not-allowed"
+            >‹ Prev</button>
+            {Array.from({ length: totalPages }, (_, idx) => idx + 1)
+              .filter(p => p === 1 || p === totalPages || Math.abs(p - page) <= 2)
+              .reduce((acc, p, idx, arr) => {
+                if (idx > 0 && p - arr[idx - 1] > 1) acc.push("...");
+                acc.push(p);
+                return acc;
+              }, [])
+              .map((p, idx) =>
+                p === "..." ? (
+                  <span key={`ellipsis-${idx}`} className="px-1.5 text-xs text-[#9CA3AF]">…</span>
+                ) : (
+                  <button
+                    key={p}
+                    onClick={() => setPage(p)}
+                    className={`w-7 h-7 rounded text-xs border font-medium transition-colors ${
+                      p === page
+                        ? "bg-[#627F31] text-white border-[#627F31]"
+                        : "border-[#DCE1D9] text-[#5C736A] hover:bg-[#EDF0EA]"
+                    }`}
+                  >{p}</button>
+                )
+              )}
+            <button
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="px-2.5 py-1 rounded text-xs border border-[#DCE1D9] text-[#5C736A] hover:bg-[#EDF0EA] disabled:opacity-40 disabled:cursor-not-allowed"
+            >Next ›</button>
+            <button
+              onClick={() => setPage(totalPages)}
+              disabled={page === totalPages}
+              className="px-2 py-1 rounded text-xs border border-[#DCE1D9] text-[#5C736A] hover:bg-[#EDF0EA] disabled:opacity-40 disabled:cursor-not-allowed"
+            >»</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
