@@ -65,7 +65,7 @@ export default function LeadDatabase() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState({ city: "", segment: "", priority: "", status: "", min_score: "" });
+  const [filters, setFilters] = useState({ city: "", segment: "", priority: "", status: "", min_score: "", date_from: "", date_to: "" });
   const [showFilters, setShowFilters] = useState(false);
   const [sortField, setSortField] = useState("created_at");
   const [sortDir, setSortDir] = useState("desc");
@@ -118,7 +118,7 @@ export default function LeadDatabase() {
   };
 
   const setFilter = (k, v) => setFilters(f => ({ ...f, [k]: v }));
-  const clearFilters = () => { setFilters({ city: "", segment: "", priority: "", status: "", min_score: "" }); setPage(1); };
+  const clearFilters = () => { setFilters({ city: "", segment: "", priority: "", status: "", min_score: "", date_from: "", date_to: "" }); setPage(1); };
 
   const SortIcon = ({ field }) => sortField === field
     ? (sortDir === "asc" ? <ChevronUp size={13} /> : <ChevronDown size={13} />)
@@ -165,7 +165,7 @@ export default function LeadDatabase() {
         </div>
 
         {showFilters && (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-3 border-t border-[#EDF0EA]" data-testid="filter-panel">
+          <div className="grid grid-cols-2 md:grid-cols-7 gap-3 pt-3 border-t border-[#EDF0EA]" data-testid="filter-panel">
             <div>
               <label className="text-xs text-[#5C736A] mb-1 block">City</label>
               <input value={filters.city} onChange={e => setFilter('city', e.target.value)} placeholder="Any city" className={inputClass + " w-full"} data-testid="filter-city" />
@@ -191,6 +191,14 @@ export default function LeadDatabase() {
             <div>
               <label className="text-xs text-[#5C736A] mb-1 block">Min Score</label>
               <input type="number" min={0} max={100} value={filters.min_score} onChange={e => setFilter('min_score', e.target.value)} placeholder="0" className={inputClass + " w-full"} data-testid="filter-min-score" />
+            </div>
+            <div>
+              <label className="text-xs text-[#5C736A] mb-1 block">Added From</label>
+              <input type="date" value={filters.date_from} onChange={e => setFilter('date_from', e.target.value)} className={inputClass + " w-full"} data-testid="filter-date-from" />
+            </div>
+            <div>
+              <label className="text-xs text-[#5C736A] mb-1 block">Added To</label>
+              <input type="date" value={filters.date_to} onChange={e => setFilter('date_to', e.target.value)} className={inputClass + " w-full"} data-testid="filter-date-to" />
             </div>
           </div>
         )}
@@ -218,6 +226,7 @@ export default function LeadDatabase() {
                     { label: "Status", field: "status" },
                     { label: "Decision Maker", field: "decision_maker_name" },
                     { label: "Rating", field: "rating" },
+                    { label: "Added On", field: "created_at" },
                     { label: "", field: null }
                   ].map(({ label, field }) => (
                     <th
@@ -293,6 +302,13 @@ export default function LeadDatabase() {
                         <Star size={11} className="text-amber-400 fill-amber-400" />
                         <span className="text-xs text-[#5C736A]">{lead.rating || "—"}</span>
                       </div>
+                    </td>
+                    <td className="px-3 py-3 whitespace-nowrap">
+                      {lead.created_at ? (
+                        <span className="text-xs text-[#5C736A]">
+                          {new Date(lead.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", timeZone: "Asia/Kolkata" })}
+                        </span>
+                      ) : <span className="text-xs text-[#9CA3AF]">—</span>}
                     </td>
                     <td className="px-3 py-3" onClick={e => e.stopPropagation()}>
                       <div className="flex items-center gap-1">
