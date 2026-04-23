@@ -1,5 +1,5 @@
 .font-heading {
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-family: 'Cabinet Grotesk', 'Figtree', sans-serif;
 }
 
 .font-body {
@@ -24,7 +24,7 @@
 }
 .sidebar-nav-item.active {
   background-color: rgba(255,255,255,0.15);
-  border-left: 3px solid #662B01;
+  border-left: 3px solid #FCE878;
 }
 
 /* Card hover effect */
@@ -33,7 +33,7 @@
 }
 .lead-card:hover {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(98, 127, 49, 0.1);
+  box-shadow: 0 2px 8px rgba(86, 121, 55, 0.15);
 }
 
 /* Table row hover */
@@ -72,12 +72,12 @@
 }
 
 /* Priority badge colors */
-.badge-high { background-color: rgba(184, 92, 56, 0.1); color: #B85C38; }
-.badge-medium { background-color: rgba(102, 43, 1, 0.08); color: #662B01; }
-.badge-low { background-color: rgba(92, 115, 106, 0.1); color: #5C736A; }
+.badge-high { background-color: rgba(121, 53, 24, 0.1); color: #793518; }
+.badge-medium { background-color: rgba(195, 163, 46, 0.12); color: #876929; }
+.badge-low { background-color: rgba(135, 105, 41, 0.1); color: #876929; }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: #F8F9F6; }
+::-webkit-scrollbar-track { background: #F7F4EC; }
 ::-webkit-scrollbar-thumb { background: #DCE1D9; border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: #5C736A; }

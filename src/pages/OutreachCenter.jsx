@@ -1,18 +1,18 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Zap, Copy, Check, Mail, Send, RefreshCw, MapPin, Search, ArrowUpRight, SendHorizonal, Clock, ChevronRight, CornerDownRight, X } from "lucide-react";
+import { Zap, Copy, Check, Mail, Send, RefreshCw, MapPin, Search, ArrowUpRight, SendHorizonal, Clock, ChevronRight, CornerDownRight, X, Paperclip } from "lucide-react";
 
 const API = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 const segColor = (s) => ({
-  Hotel: "#662B01", Restaurant: "#3D6B56", Cafe: "#8FA39A",
-  Bakery: "#B85C38", CloudKitchen: "#D4956A", Catering: "#6B5E44",
+  Hotel: "#793518", Restaurant: "#3D6B56", Cafe: "#8FA39A",
+  Bakery: "#793518", CloudKitchen: "#D4956A", Catering: "#6B5E44",
   Mithai: "#A0522D", IceCream: "#C4878A",
   Beverage: "#4A7FA5", FoodProcessing: "#7B6D47", Organic: "#5A8A3C", Brewery: "#7B4F72",
 }[s] || "#5C736A");
 
-const priorityColor = (p) => p === "High" ? "#B85C38" : p === "Medium" ? "#662B01" : "#5C736A";
+const priorityColor = (p) => p === "High" ? "#793518" : p === "Medium" ? "#793518" : "#5C736A";
 
 const StatusBadge = ({ status }) => {
   const cfg = {
@@ -188,13 +188,13 @@ export default function OutreachCenter() {
   }
 
   return (
-    <div className="p-6" style={{ backgroundColor: "#F8F9F6", minHeight: "100vh" }}>
+    <div className="p-6" style={{ backgroundColor: "#F7F4EC", minHeight: "100vh" }}>
 
       {/* ── Header ── */}
       <div className="flex items-start justify-between mb-5">
         <div>
           <p className="text-xs uppercase tracking-widest text-[#5C736A] mb-1" style={{ letterSpacing: '0.2em' }}>AI Outreach</p>
-          <h1 className="text-2xl font-bold text-[#627F31]" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Outreach Center</h1>
+          <h1 className="text-2xl font-bold text-[#567937]" style={{ fontFamily: 'Cabinet Grotesk, sans-serif' }}>Outreach Center</h1>
           <p className="text-sm text-[#5C736A] mt-1">Generate and manage AI-personalized sales emails</p>
         </div>
         <div className="flex items-center gap-2">
@@ -212,7 +212,7 @@ export default function OutreachCenter() {
             data-testid="bulk-send-btn"
             onClick={handleBulkSend}
             disabled={bulkSending}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-[#662B01] hover:opacity-90 disabled:opacity-60 transition-opacity"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-[#793518] hover:opacity-90 disabled:opacity-60 transition-opacity"
           >
             {bulkSending
               ? <><RefreshCw size={14} className="animate-spin" /> Sending...</>
@@ -279,7 +279,7 @@ export default function OutreachCenter() {
             onClick={() => setTab(id)}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
               tab === id
-                ? "bg-[#627F31] text-white shadow-sm"
+                ? "bg-[#567937] text-white shadow-sm"
                 : "text-[#5C736A] hover:bg-[#F0F3EF]"
             }`}
           >
@@ -304,7 +304,7 @@ export default function OutreachCenter() {
                   value={leadSearch}
                   onChange={e => setLeadSearch(e.target.value)}
                   placeholder="Search by name or city…"
-                  className="w-full pl-8 border border-[#DCE1D9] rounded-md py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+                  className="w-full pl-8 border border-[#DCE1D9] rounded-md py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#567937]"
                 />
               </div>
               <div className="space-y-1 max-h-[420px] overflow-y-auto">
@@ -315,8 +315,8 @@ export default function OutreachCenter() {
                     onClick={() => { setSelectedLead(lead); setGenerateError(""); setActiveEmail(null); }}
                     className={`w-full text-left p-2.5 rounded-lg border transition-all ${
                       selectedLead?.id === lead.id
-                        ? "border-[#627F31] bg-[#627F31]/5"
-                        : "border-transparent hover:bg-[#F8F9F6]"
+                        ? "border-[#567937] bg-[#567937]/5"
+                        : "border-transparent hover:bg-[#F7F4EC]"
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -347,7 +347,7 @@ export default function OutreachCenter() {
 
             {/* Generate button card */}
             {selectedLead && (
-              <div className="bg-[#627F31] text-white rounded-xl p-4">
+              <div className="bg-[#567937] text-white rounded-xl p-4">
                 <p className="text-xs text-white/50 uppercase tracking-widest mb-1" style={{ letterSpacing: '0.15em' }}>Selected</p>
                 <p className="font-semibold text-sm">{selectedLead.business_name}</p>
                 <p className="text-xs text-white/60 mt-0.5">{selectedLead.segment} · {selectedLead.city}</p>
@@ -356,7 +356,7 @@ export default function OutreachCenter() {
                     data-testid="generate-email-outreach-btn"
                     onClick={handleGenerateEmail}
                     disabled={generating}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[#627F31] text-xs font-semibold bg-white hover:bg-[#F0F0F0] disabled:opacity-60 transition-opacity"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[#567937] text-xs font-semibold bg-white hover:bg-[#F0F0F0] disabled:opacity-60 transition-opacity"
                   >
                     {generating ? <><RefreshCw size={12} className="animate-spin" /> Generating…</> : <><Zap size={12} /> Generate Email</>}
                   </button>
@@ -380,7 +380,7 @@ export default function OutreachCenter() {
           <div className="col-span-3">
             {activeEmail ? (
               <div className="bg-white border border-[#DCE1D9] rounded-xl overflow-hidden">
-                <div className="bg-[#F8F9F6] border-b border-[#DCE1D9] px-5 py-4">
+                <div className="bg-[#F7F4EC] border-b border-[#DCE1D9] px-5 py-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <p className="text-[10px] text-[#9CA3AF] uppercase tracking-widest mb-1">Subject</p>
@@ -394,7 +394,7 @@ export default function OutreachCenter() {
                         <button
                           onClick={() => markSent(activeEmail.id)}
                           disabled={markSentLoading}
-                          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs text-white bg-[#662B01] hover:opacity-90 disabled:opacity-60"
+                          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs text-white bg-[#793518] hover:opacity-90 disabled:opacity-60"
                         >
                           {markSentLoading
                             ? <><RefreshCw size={12} className="animate-spin" /> Sending…</>
@@ -408,6 +408,19 @@ export default function OutreachCenter() {
                     <span>·</span>
                     <span>{new Date(activeEmail.generated_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
                     <StatusBadge status={activeEmail.status} />
+                  </div>
+                  {/* Attachment */}
+                  <div className="mt-3">
+                    <a
+                      href="/DhampurGreen_HOReCa_RateList_2026.html"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#C3A32E]/40 bg-[#C3A32E]/8 text-[#876929] text-[11px] font-medium hover:bg-[#C3A32E]/15 transition-colors"
+                      style={{ backgroundColor: 'rgba(195,163,46,0.08)' }}
+                    >
+                      <Paperclip size={11} />
+                      DhampurGreen_HOReCa_RateList_2026.html
+                    </a>
                   </div>
                   {markSentError && (
                     <p className="mt-2 text-[10px] text-red-600 bg-red-50 border border-red-200 rounded px-2 py-1.5">⚠ {markSentError}</p>
@@ -449,7 +462,7 @@ export default function OutreachCenter() {
               </div>
 
               {/* table header */}
-              <div className="grid grid-cols-12 gap-2 px-4 py-2 bg-[#F8F9F6] border-b border-[#F0F3EF] text-[10px] uppercase tracking-widest text-[#9CA3AF]">
+              <div className="grid grid-cols-12 gap-2 px-4 py-2 bg-[#F7F4EC] border-b border-[#F0F3EF] text-[10px] uppercase tracking-widest text-[#9CA3AF]">
                 <div className="col-span-3">Lead</div>
                 <div className="col-span-4">Subject</div>
                 <div className="col-span-2">City</div>
@@ -467,11 +480,11 @@ export default function OutreachCenter() {
                     data-testid={`email-history-item-${i}`}
                     onClick={() => { setActiveEmail(email); setMarkSentError(""); }}
                     className={`w-full grid grid-cols-12 gap-2 px-4 py-3 text-left transition-colors ${
-                      activeEmail?.id === email.id ? "bg-[#627F31]/5" : "hover:bg-[#F8F9F6]"
+                      activeEmail?.id === email.id ? "bg-[#567937]/5" : "hover:bg-[#F7F4EC]"
                     }`}
                   >
                     <div className="col-span-3 flex items-center gap-2 min-w-0">
-                      {activeEmail?.id === email.id && <div className="w-1 h-4 rounded bg-[#627F31] flex-shrink-0" />}
+                      {activeEmail?.id === email.id && <div className="w-1 h-4 rounded bg-[#567937] flex-shrink-0" />}
                       <div className="min-w-0">
                         <p className="text-xs font-medium text-[#16221E] truncate">{email.lead_name}</p>
                         <div className="flex items-center gap-1 mt-0.5">
@@ -512,7 +525,7 @@ export default function OutreachCenter() {
           <div className="col-span-2">
             {activeEmail ? (
               <div className="bg-white border border-[#DCE1D9] rounded-xl overflow-hidden sticky top-4">
-                <div className="bg-[#F8F9F6] border-b border-[#DCE1D9] px-4 py-3">
+                <div className="bg-[#F7F4EC] border-b border-[#DCE1D9] px-4 py-3">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <p className="text-xs font-semibold text-[#16221E] flex-1 leading-snug">{activeEmail.subject}</p>
                     <StatusBadge status={activeEmail.status} />
@@ -523,7 +536,18 @@ export default function OutreachCenter() {
                   <p className="text-[10px] text-[#9CA3AF] mt-0.5">
                     {new Date(activeEmail.generated_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                   </p>
-                  <div className="flex gap-1.5 mt-3">
+                  {/* Attachment */}
+                  <a
+                    href="/DhampurGreen_HOReCa_RateList_2026.html"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#C3A32E]/40 text-[#876929] text-[11px] font-medium hover:bg-[#C3A32E]/15 transition-colors w-full truncate"
+                    style={{ backgroundColor: 'rgba(195,163,46,0.08)' }}
+                  >
+                    <Paperclip size={11} className="flex-shrink-0" />
+                    <span className="truncate">DhampurGreen_HOReCa_RateList_2026.html</span>
+                  </a>
+                  <div className="flex gap-1.5 mt-2">
                     <button onClick={copyEmail} className="flex items-center gap-1 px-2.5 py-1.5 rounded-md border border-[#DCE1D9] text-xs text-[#5C736A] hover:bg-[#EDF0EA]">
                       {copied ? <><Check size={11} className="text-green-600" /> Copied</> : <><Copy size={11} /> Copy</>}
                     </button>
@@ -531,7 +555,7 @@ export default function OutreachCenter() {
                       <button
                         onClick={() => markSent(activeEmail.id)}
                         disabled={markSentLoading}
-                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs text-white bg-[#662B01] hover:opacity-90 disabled:opacity-60"
+                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs text-white bg-[#793518] hover:opacity-90 disabled:opacity-60"
                       >
                         {markSentLoading
                           ? <><RefreshCw size={11} className="animate-spin" /> Sending…</>

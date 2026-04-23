@@ -112,7 +112,7 @@ export function CityCombobox({
           type="button"
           data-testid={testId}
           className={cn(
-            "w-full flex items-center justify-between gap-2 border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#627F31] transition-colors hover:border-[#627F31]/50",
+            "w-full flex items-center justify-between gap-2 border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#567937] transition-colors hover:border-[#567937]/50",
             value ? "text-[#16221E]" : "text-[#9CA3AF]",
             className
           )}
@@ -157,7 +157,7 @@ export function CityCombobox({
                     className={cn(
                       "flex-shrink-0",
                       value === city.name
-                        ? "opacity-100 text-[#627F31]"
+                        ? "opacity-100 text-[#567937]"
                         : "opacity-0"
                     )}
                   />

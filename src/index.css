@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@300,400,500,600,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,36 +9,44 @@ body {
   font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #F8F9F6;
+  background-color: #F7F4E9;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Cabinet Grotesk', 'Figtree', sans-serif;
 }
 
 @layer base {
   :root {
-    --background: 88 12% 97%;
-    --foreground: 157 18% 12%;
+    /* Dhampur Green brand palette */
+    /* Primary: #567937 (green), #793518 (dark red), #FCE878 (yellow) */
+    /* Secondary: #C3A32E (gold), #876929 (brown), #AC4B25 (red-orange) */
+    /* Base: #3F3029 (dark), #FCF7D4 (cream) */
+    --background: 52 30% 96%;
+    --foreground: 19 21% 14%;
     --card: 0 0% 100%;
-    --card-foreground: 157 18% 12%;
+    --card-foreground: 19 21% 14%;
     --popover: 0 0% 100%;
-    --popover-foreground: 157 18% 12%;
-    --primary: 157 47% 14%;
+    --popover-foreground: 19 21% 14%;
+    --primary: 92 37% 34%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 88 8% 92%;
-    --secondary-foreground: 157 18% 12%;
-    --muted: 88 10% 93%;
-    --muted-foreground: 157 12% 42%;
-    --accent: 88 8% 92%;
-    --accent-foreground: 157 18% 12%;
+    --secondary: 52 20% 92%;
+    --secondary-foreground: 19 21% 14%;
+    --muted: 52 15% 91%;
+    --muted-foreground: 92 12% 40%;
+    --accent: 43 63% 47%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 88 8% 87%;
-    --input: 88 8% 87%;
-    --ring: 157 47% 14%;
+    --border: 52 12% 85%;
+    --input: 52 12% 85%;
+    --ring: 92 37% 34%;
     --radius: 0.5rem;
-    --chart-1: 157 47% 14%;
-    --chart-2: 157 20% 54%;
-    --chart-3: 20 56% 48%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --chart-1: 92 37% 34%;
+    --chart-2: 43 63% 47%;
+    --chart-3: 18 67% 28%;
+    --chart-4: 54 96% 73%;
+    --chart-5: 26 55% 40%;
   }
 }
 

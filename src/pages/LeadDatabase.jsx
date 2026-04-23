@@ -31,8 +31,8 @@ const PRIORITIES = ["", "High", "Medium", "Low"];
 const STATUSES = ["", "new", "contacted", "qualified", "converted", "lost"];
 
 const segColor = (s) => ({
-  Hotel: "#662B01", Restaurant: "#3D6B56", Cafe: "#8FA39A",
-  Bakery: "#B85C38", CloudKitchen: "#D4956A", Catering: "#6B5E44",
+  Hotel: "#793518", Restaurant: "#3D6B56", Cafe: "#8FA39A",
+  Bakery: "#793518", CloudKitchen: "#D4956A", Catering: "#6B5E44",
   Mithai: "#A0522D", IceCream: "#C4878A",
   Beverage: "#4A7FA5", FoodProcessing: "#7B6D47", Organic: "#5A8A3C", Brewery: "#7B4F72",
 }[s] || "#5C736A");
@@ -41,14 +41,14 @@ const priorityBg = (p) => p === "High" ? "badge-high" : p === "Medium" ? "badge-
 
 const statusColors = {
   new: { bg: "#EDF0EA", text: "#5C736A" },
-  contacted: { bg: "rgba(98,127,49,0.1)", text: "#627F31" },
-  qualified: { bg: "rgba(184,92,56,0.1)", text: "#B85C38" },
+  contacted: { bg: "rgba(98,127,49,0.1)", text: "#567937" },
+  qualified: { bg: "rgba(184,92,56,0.1)", text: "#793518" },
   converted: { bg: "rgba(22,163,74,0.1)", text: "#16a34a" },
   lost: { bg: "rgba(156,163,175,0.15)", text: "#6B7280" }
 };
 
 function ScoreBar({ score }) {
-  const color = score >= 70 ? "#627F31" : score >= 40 ? "#B85C38" : "#9CA3AF";
+  const color = score >= 70 ? "#567937" : score >= 40 ? "#793518" : "#9CA3AF";
   return (
     <div className="flex items-center gap-2 min-w-[90px]">
       <div className="flex-1 h-1.5 bg-[#EDF0EA] rounded-full overflow-hidden">
@@ -124,15 +124,15 @@ export default function LeadDatabase() {
     ? (sortDir === "asc" ? <ChevronUp size={13} /> : <ChevronDown size={13} />)
     : <ChevronDown size={13} className="opacity-30" />;
 
-  const inputClass = "border border-[#DCE1D9] rounded-md px-3 py-1.5 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#627F31]";
+  const inputClass = "border border-[#DCE1D9] rounded-md px-3 py-1.5 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#567937]";
 
   return (
-    <div className="p-6" style={{ backgroundColor: "#F8F9F6", minHeight: "100vh" }}>
+    <div className="p-6" style={{ backgroundColor: "#F7F4EC", minHeight: "100vh" }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-5 animate-fade-in">
         <div>
           <p className="text-xs uppercase tracking-widest text-[#5C736A] mb-1" style={{ letterSpacing: '0.2em' }}>All Leads</p>
-          <h1 className="text-2xl font-bold text-[#627F31]" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+          <h1 className="text-2xl font-bold text-[#567937]" style={{ fontFamily: 'Cabinet Grotesk, sans-serif' }}>
             Lead Database
             <span className="ml-3 text-sm font-normal text-[#5C736A] bg-[#EDF0EA] px-2 py-0.5 rounded-full">{total}</span>
           </h1>
@@ -156,11 +156,11 @@ export default function LeadDatabase() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search by name, city, decision maker..."
-              className="w-full pl-9 border border-[#DCE1D9] rounded-md py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+              className="w-full pl-9 border border-[#DCE1D9] rounded-md py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#567937]"
             />
           </div>
           {Object.values(filters).some(v => v) && (
-            <button onClick={clearFilters} className="text-xs text-[#B85C38] hover:opacity-70 whitespace-nowrap" data-testid="clear-filters-btn">Clear filters</button>
+            <button onClick={clearFilters} className="text-xs text-[#793518] hover:opacity-70 whitespace-nowrap" data-testid="clear-filters-btn">Clear filters</button>
           )}
         </div>
 
@@ -216,7 +216,7 @@ export default function LeadDatabase() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm" data-testid="leads-table">
               <thead>
-                <tr className="border-b border-[#EDF0EA] bg-[#F8F9F6]">
+                <tr className="border-b border-[#EDF0EA] bg-[#F7F4EC]">
                   <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#5C736A] w-10">#</th>
                   {[
                     { label: "Business", field: "business_name" },
@@ -232,7 +232,7 @@ export default function LeadDatabase() {
                     <th
                       key={label}
                       onClick={() => field && toggleSort(field)}
-                      className={`px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#5C736A] whitespace-nowrap ${field ? "cursor-pointer hover:text-[#627F31]" : ""}`}
+                      className={`px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#5C736A] whitespace-nowrap ${field ? "cursor-pointer hover:text-[#567937]" : ""}`}
                       style={{ letterSpacing: '0.08em' }}
                     >
                       <span className="flex items-center gap-1">{label} {field && <SortIcon field={field} />}</span>
@@ -292,7 +292,7 @@ export default function LeadDatabase() {
                           <div>
                             <p className="text-xs font-medium text-[#16221E]">{c.name}</p>
                             <p className="text-xs text-[#9CA3AF]">{c.role || c.department || "—"}</p>
-                            {c.email && <p className="text-xs text-[#627F31] truncate max-w-[160px]">{c.email}</p>}
+                            {c.email && <p className="text-xs text-[#567937] truncate max-w-[160px]">{c.email}</p>}
                           </div>
                         ) : <span className="text-xs text-[#9CA3AF]">—</span>;
                       })()}
@@ -371,7 +371,7 @@ export default function LeadDatabase() {
                     onClick={() => setPage(p)}
                     className={`w-7 h-7 rounded text-xs border font-medium transition-colors ${
                       p === page
-                        ? "bg-[#627F31] text-white border-[#627F31]"
+                        ? "bg-[#567937] text-white border-[#567937]"
                         : "border-[#DCE1D9] text-[#5C736A] hover:bg-[#EDF0EA]"
                     }`}
                   >{p}</button>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Search, Database, Mail, Leaf, TrendingUp, Users, MapPin, Layers } from "lucide-react";
+import { LayoutDashboard, Search, Database, Mail, TrendingUp, Users, MapPin, Layers } from "lucide-react";
 import { CitiesPanel } from "./CitiesPanel";
 import { SegmentsPanel } from "./SegmentsPanel";
 
@@ -19,20 +19,24 @@ export default function Sidebar() {
   return (
     <aside
       data-testid="sidebar"
-      style={{ backgroundColor: "#627F31", minWidth: "260px", maxWidth: "260px" }}
+      style={{ backgroundColor: "#567937", minWidth: "260px", maxWidth: "260px" }}
       className="flex flex-col h-screen overflow-hidden"
     >
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-white/10">
+      <div className="px-5 py-4 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#B85C38]">
-            <Leaf size={18} className="text-white" strokeWidth={2} />
-          </div>
-          <div>
-            <p className="font-heading text-white font-bold text-sm leading-tight" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-              Dhampur Green
-            </p>
-            <p className="text-white/50 text-xs leading-tight">HORECA Intelligence</p>
+          <img
+            src="/mnemonic_logo.png"
+            alt="Dhampur Green mark"
+            className="w-9 h-9 object-contain flex-shrink-0"
+          />
+          <div className="flex flex-col">
+            <img
+              src="/logo.png"
+              alt="Dhampur Green"
+              className="h-6 object-contain object-left"
+            />
+            <p className="text-white/50 text-xs leading-tight mt-0.5">HORECA Intelligence</p>
           </div>
         </div>
       </div>
@@ -84,11 +88,11 @@ export default function Sidebar() {
         <div className="bg-white/5 rounded-lg p-3 space-y-2">
           <p className="text-white/40 text-xs uppercase tracking-widest" style={{ letterSpacing: '0.15em' }}>Product</p>
           <div className="flex items-center gap-2">
-            <TrendingUp size={13} className="text-[#B85C38]" />
+            <TrendingUp size={13} className="text-[#793518]" />
             <span className="text-white/70 text-xs">Premium Sugar Supplier</span>
           </div>
           <div className="flex items-center gap-2">
-            <Users size={13} className="text-[#B85C38]" />
+            <Users size={13} className="text-[#793518]" />
             <span className="text-white/70 text-xs">B2B HORECA Sales</span>
           </div>
         </div>

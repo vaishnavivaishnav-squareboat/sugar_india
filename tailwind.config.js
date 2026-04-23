@@ -13,6 +13,17 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+  			/* Dhampur Green brand palette */
+  			brand: {
+  				green:  '#567937',
+  				red:    '#793518',
+  				yellow: '#FCE878',
+  				gold:   '#C3A32E',
+  				brown:  '#876929',
+  				orange: '#AC4B25',
+  				dark:   '#3F3029',
+  				cream:  '#FCF7D4',
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

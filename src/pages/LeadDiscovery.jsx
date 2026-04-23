@@ -6,10 +6,10 @@ import { Search, Upload, PlusCircle, CheckSquare, Square, ArrowRight, ChevronDow
 const API = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 
-const priorityColor = (p) => p === "High" ? "#B85C38" : p === "Medium" ? "#662B01" : "#5C736A";
+const priorityColor = (p) => p === "High" ? "#793518" : p === "Medium" ? "#793518" : "#5C736A";
 const segColor = (s) => ({
-  Hotel: "#662B01", Restaurant: "#3D6B56", Cafe: "#8FA39A",
-  Bakery: "#B85C38", CloudKitchen: "#D4956A", Catering: "#6B5E44",
+  Hotel: "#793518", Restaurant: "#3D6B56", Cafe: "#8FA39A",
+  Bakery: "#793518", CloudKitchen: "#D4956A", Catering: "#6B5E44",
   Mithai: "#A0522D", IceCream: "#C4878A",
   Beverage: "#4A7FA5", FoodProcessing: "#7B6D47", Organic: "#5A8A3C", Brewery: "#7B4F72",
 }[s] || "#5C736A");
@@ -20,7 +20,7 @@ function TabButton({ active, onClick, children, testId }) {
     <button
       data-testid={testId}
       onClick={onClick}
-      className={`px-5 py-2.5 text-sm font-medium border-b-2 transition-colors ${active ? "border-[#627F31] text-[#627F31]" : "border-transparent text-[#5C736A] hover:text-[#16221E]"}`}
+      className={`px-5 py-2.5 text-sm font-medium border-b-2 transition-colors ${active ? "border-[#567937] text-[#567937]" : "border-transparent text-[#5C736A] hover:text-[#16221E]"}`}
     >
       {children}
     </button>
@@ -138,7 +138,7 @@ function DiscoverTab() {
                   setCity(e.target.value);
                   setState(selected?.state || "");
                 }}
-                className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+                className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#567937]"
               >
                 {targetCities.map(c => (
                   <option key={c.id} value={c.name}>{c.name}</option>
@@ -167,7 +167,7 @@ function DiscoverTab() {
                 data-testid="discover-segment-select"
                 value={segment}
                 onChange={e => setSegment(e.target.value)}
-                className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+                className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#567937]"
               >
                 {targetSegments.map(s => (
                   <option key={s.id} value={s.key}>{s.label}</option>
@@ -182,7 +182,7 @@ function DiscoverTab() {
               onClick={handleSearch}
               disabled={loading || !city || !segment}
               className="w-full flex items-center justify-center gap-2 px-5 py-2 rounded-md text-white text-sm font-medium disabled:opacity-60 transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#662B01" }}
+              style={{ backgroundColor: "#793518" }}
             >
               <Search size={15} />
               {loading ? "Searching..." : "Search Leads"}
@@ -191,7 +191,7 @@ function DiscoverTab() {
         </div>
         {city && (
           <p className="text-xs text-[#5C736A] mt-3 flex items-center gap-1">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#627F31] flex-shrink-0" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#567937] flex-shrink-0" />
             AI-powered lead discovery for {segment}s in {city}, India — save selected leads to your database
           </p>
         )}
@@ -202,7 +202,7 @@ function DiscoverTab() {
           <div className="flex items-center justify-between mb-3">
             <p className="text-sm font-medium text-[#16221E]">{results.length} leads found in {city}</p>
             <div className="flex gap-2">
-              <button onClick={selectAll} className="text-xs text-[#627F31] hover:opacity-70"
+              <button onClick={selectAll} className="text-xs text-[#567937] hover:opacity-70"
                 data-testid="select-all-btn">Select All</button>
               <span className="text-[#DCE1D9]">|</span>
               <button onClick={clearAll} className="text-xs text-[#5C736A] hover:opacity-70">Clear</button>
@@ -215,12 +215,12 @@ function DiscoverTab() {
                 key={i}
                 data-testid={`discover-result-${i}`}
                 onClick={() => toggleSelect(i)}
-                className={`bg-white border rounded-lg p-4 cursor-pointer transition-all ${selected.has(i) ? "border-[#627F31] ring-1 ring-[#627F31]" : "border-[#DCE1D9]"}`}
+                className={`bg-white border rounded-lg p-4 cursor-pointer transition-all ${selected.has(i) ? "border-[#567937] ring-1 ring-[#567937]" : "border-[#DCE1D9]"}`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      {selected.has(i) ? <CheckSquare size={16} className="text-[#627F31] flex-shrink-0" /> : <Square size={16} className="text-[#DCE1D9] flex-shrink-0" />}
+                      {selected.has(i) ? <CheckSquare size={16} className="text-[#567937] flex-shrink-0" /> : <Square size={16} className="text-[#DCE1D9] flex-shrink-0" />}
                       <p className="font-semibold text-sm text-[#16221E] truncate">{lead.business_name}</p>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-2">
@@ -238,7 +238,7 @@ function DiscoverTab() {
                         </span>
                       )}
                       {lead.hotel_category && (
-                        <span className="px-2 py-0.5 rounded text-xs bg-[#EDF0EA] text-[#627F31]">{lead.hotel_category}</span>
+                        <span className="px-2 py-0.5 rounded text-xs bg-[#EDF0EA] text-[#567937]">{lead.hotel_category}</span>
                       )}
                       {lead.is_chain && <span className="px-2 py-0.5 rounded text-xs bg-[#EDF0EA] text-[#5C736A]">Chain</span>}
                     </div>
@@ -248,7 +248,7 @@ function DiscoverTab() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-bold" style={{ color: lead.ai_score >= 70 ? "#627F31" : lead.ai_score >= 40 ? "#B85C38" : "#9CA3AF", fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                    <div className="text-lg font-bold" style={{ color: lead.ai_score >= 70 ? "#567937" : lead.ai_score >= 40 ? "#793518" : "#9CA3AF", fontFamily: 'Cabinet Grotesk, sans-serif' }}>
                       {lead.ai_score}
                     </div>
                     <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: priorityColor(lead.priority) + '18', color: priorityColor(lead.priority) }}>
@@ -265,7 +265,7 @@ function DiscoverTab() {
               data-testid="save-selected-leads-btn"
               onClick={handleSave}
               className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-white text-sm font-medium transition-opacity hover:opacity-90"
-              style={{ backgroundColor: saved ? "#16a34a" : "#662B01" }}
+              style={{ backgroundColor: saved ? "#16a34a" : "#793518" }}
             >
               {saved ? "Saved! Redirecting..." : `Save ${selected.size} Selected Leads`}
               {!saved && <ArrowRight size={15} />}
@@ -331,7 +331,7 @@ function CSVTab() {
         <button
           data-testid="download-template-btn"
           onClick={downloadTemplate}
-          className="flex items-center gap-1.5 text-sm text-[#627F31] hover:opacity-70 font-medium border border-[#DCE1D9] px-3 py-1.5 rounded-md"
+          className="flex items-center gap-1.5 text-sm text-[#567937] hover:opacity-70 font-medium border border-[#DCE1D9] px-3 py-1.5 rounded-md"
         >
           <Download size={13} /> Download Template (.xlsx)
         </button>
@@ -343,17 +343,17 @@ function CSVTab() {
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
         onClick={() => fileRef.current?.click()}
-        className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all ${dragOver ? "border-[#627F31] bg-[#627F31]/5" : "border-[#DCE1D9] bg-[#EAECE6] hover:border-[#627F31]/40"}`}
+        className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all ${dragOver ? "border-[#567937] bg-[#567937]/5" : "border-[#DCE1D9] bg-[#EAECE6] hover:border-[#567937]/40"}`}
         style={{
           backgroundImage: `url(https://images.unsplash.com/photo-1751956066306-c5684cbcf385?w=600&q=40)`,
           backgroundSize: 'cover', backgroundPosition: 'center', backgroundBlendMode: 'overlay'
         }}
       >
         <input ref={fileRef} type="file" accept=".csv,.xlsx" className="hidden" onChange={e => setFile(e.target.files[0])} />
-        <Upload size={32} className="mx-auto mb-3 text-[#627F31] opacity-70" strokeWidth={1.5} />
+        <Upload size={32} className="mx-auto mb-3 text-[#567937] opacity-70" strokeWidth={1.5} />
         {file ? (
           <div>
-            <p className="font-semibold text-[#627F31]">{file.name}</p>
+            <p className="font-semibold text-[#567937]">{file.name}</p>
             <p className="text-sm text-[#5C736A] mt-1">{(file.size / 1024).toFixed(1)} KB · Ready to upload</p>
           </div>
         ) : (
@@ -370,7 +370,7 @@ function CSVTab() {
           onClick={handleUpload}
           disabled={uploading}
           className="px-6 py-2.5 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: "#662B01" }}
+          style={{ backgroundColor: "#793518" }}
         >
           {uploading ? "Uploading..." : "Upload & Import Leads"}
         </button>
@@ -396,8 +396,8 @@ function CSVTab() {
 
       {/* Live reference: Active Cities & Segments */}
       <div className="bg-white border border-[#DCE1D9] rounded-lg overflow-hidden">
-        <div className="px-4 py-3 bg-[#F8F9F6] border-b border-[#EDF0EA] flex items-center justify-between">
-          <p className="text-xs font-semibold text-[#627F31] uppercase tracking-widest" style={{ letterSpacing: '0.1em' }}>
+        <div className="px-4 py-3 bg-[#F7F4EC] border-b border-[#EDF0EA] flex items-center justify-between">
+          <p className="text-xs font-semibold text-[#567937] uppercase tracking-widest" style={{ letterSpacing: '0.1em' }}>
             Valid Values Reference
           </p>
           <p className="text-[10px] text-[#9CA3AF]">These exact values are pre-loaded as dropdowns in the .xlsx template</p>
@@ -419,7 +419,7 @@ function CSVTab() {
             {/* Cities */}
             <div>
               <p className="text-xs font-semibold text-[#16221E] mb-2 flex items-center gap-1.5">
-                <MapPin size={11} className="text-[#627F31]" />
+                <MapPin size={11} className="text-[#567937]" />
                 city column
                 <span className="font-normal text-[#9CA3AF]">({targetCities.length} active)</span>
               </p>
@@ -447,7 +447,7 @@ function CSVTab() {
             {/* Segments */}
             <div>
               <p className="text-xs font-semibold text-[#16221E] mb-2 flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#627F31] inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#567937] inline-block" />
                 segment column
                 <span className="font-normal text-[#9CA3AF]">({targetSegments.length} active)</span>
               </p>
@@ -474,7 +474,7 @@ function CSVTab() {
 
         {/* Static column guide */}
         <div className="px-4 pb-4">
-          <p className="text-xs font-semibold text-[#627F31] uppercase tracking-widest mb-2 mt-1" style={{ letterSpacing: '0.1em' }}>Other Columns</p>
+          <p className="text-xs font-semibold text-[#567937] uppercase tracking-widest mb-2 mt-1" style={{ letterSpacing: '0.1em' }}>Other Columns</p>
           <div className="grid grid-cols-2 gap-x-6 gap-y-1">
             {[
               ["business_name*", "Business name (required)"],
@@ -494,7 +494,7 @@ function CSVTab() {
               ["decision_maker_linkedin", "LinkedIn profile URL"],
             ].map(([col, desc]) => (
               <div key={col} className="flex gap-2">
-                <code className="text-xs text-[#B85C38] font-mono shrink-0">{col}</code>
+                <code className="text-xs text-[#793518] font-mono shrink-0">{col}</code>
                 <span className="text-xs text-[#5C736A]">— {desc}</span>
               </div>
             ))}
@@ -554,7 +554,7 @@ function ManualTab() {
     setSaving(false);
   };
 
-  const inputClass = "w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#627F31]";
+  const inputClass = "w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#567937]";
   const skeletonClass = "w-full h-9 bg-[#EDF0EA] border border-[#DCE1D9] rounded-md animate-pulse";
   const labelClass = "text-xs text-[#5C736A] mb-1 block";
 
@@ -641,7 +641,7 @@ function ManualTab() {
             value={form.state}
             readOnly={!!form.state}
             onChange={e => set('state', e.target.value)}
-            className={inputClass + (form.state ? " bg-[#F8F9F6] text-[#5C736A] cursor-default" : "")}
+            className={inputClass + (form.state ? " bg-[#F7F4EC] text-[#5C736A] cursor-default" : "")}
             placeholder="e.g. Maharashtra"
           />
         </div>
@@ -650,7 +650,7 @@ function ManualTab() {
           <input
             value={form.country || "India"}
             readOnly
-            className={inputClass + " bg-[#F8F9F6] text-[#5C736A] cursor-default select-none"}
+            className={inputClass + " bg-[#F7F4EC] text-[#5C736A] cursor-default select-none"}
           />
         </div>
 
@@ -717,11 +717,11 @@ function ManualTab() {
 
         {/* Row 8: Checkboxes */}
         <div className="flex items-center gap-3">
-          <input type="checkbox" id="dessert" checked={form.has_dessert_menu} onChange={e => set('has_dessert_menu', e.target.checked)} className="w-4 h-4 accent-[#627F31]" />
+          <input type="checkbox" id="dessert" checked={form.has_dessert_menu} onChange={e => set('has_dessert_menu', e.target.checked)} className="w-4 h-4 accent-[#567937]" />
           <label htmlFor="dessert" className="text-sm text-[#16221E]">Has Dessert/Sweet Menu</label>
         </div>
         <div className="flex items-center gap-3">
-          <input type="checkbox" id="chain" checked={form.is_chain} onChange={e => set('is_chain', e.target.checked)} className="w-4 h-4 accent-[#627F31]" />
+          <input type="checkbox" id="chain" checked={form.is_chain} onChange={e => set('is_chain', e.target.checked)} className="w-4 h-4 accent-[#567937]" />
           <label htmlFor="chain" className="text-sm text-[#16221E]">Is a Chain</label>
         </div>
       </div>
@@ -731,7 +731,7 @@ function ManualTab() {
         data-testid="manual-submit-btn"
         disabled={saving}
         className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90 transition-opacity"
-        style={{ backgroundColor: saved ? "#16a34a" : "#662B01" }}
+        style={{ backgroundColor: saved ? "#16a34a" : "#793518" }}
       >
         {saved ? "Lead Added! Redirecting..." : saving ? "Saving..." : (<><PlusCircle size={15} /> Add Lead & Calculate Score</>)}
       </button>
@@ -744,10 +744,10 @@ export default function LeadDiscovery() {
   const [tab, setTab] = useState("discover");
 
   return (
-    <div className="p-6" style={{ backgroundColor: "#F8F9F6", minHeight: "100vh" }}>
+    <div className="p-6" style={{ backgroundColor: "#F7F4EC", minHeight: "100vh" }}>
       <div className="mb-6 animate-fade-in">
         <p className="text-xs uppercase tracking-widest text-[#5C736A] mb-1" style={{ letterSpacing: '0.2em' }}>Add Leads</p>
-        <h1 className="text-2xl font-bold text-[#627F31]" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+        <h1 className="text-2xl font-bold text-[#567937]" style={{ fontFamily: 'Cabinet Grotesk, sans-serif' }}>
           Lead Discovery
         </h1>
         <p className="text-sm text-[#5C736A] mt-1">Search HORECA businesses, upload CSV, or add leads manually</p>

@@ -10,19 +10,19 @@ import { TrendingUp, Users, Star, ArrowRight, MapPin, Trophy, Zap } from "lucide
 const API = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 const SEGMENT_COLORS = {
-  Hotel: "#662B01", Restaurant: "#3D6B56", Cafe: "#8FA39A",
-  Bakery: "#B85C38", CloudKitchen: "#D4956A", Catering: "#6B5E44",
+  Hotel: "#793518", Restaurant: "#3D6B56", Cafe: "#8FA39A",
+  Bakery: "#793518", CloudKitchen: "#D4956A", Catering: "#6B5E44",
   Mithai: "#A0522D", IceCream: "#C4878A",
   Beverage: "#4A7FA5", FoodProcessing: "#7B6D47", Organic: "#5A8A3C", Brewery: "#7B4F72",
   Unknown: "#9CA3AF"
 };
 
 const STATUS_COLORS = {
-  new: "#8FA39A", contacted: "#627F31", qualified: "#B85C38",
+  new: "#8FA39A", contacted: "#567937", qualified: "#793518",
   converted: "#16a34a", lost: "#9CA3AF"
 };
 
-const priorityColor = (p) => p === "High" ? "#B85C38" : p === "Medium" ? "#662B01" : "#5C736A";
+const priorityColor = (p) => p === "High" ? "#793518" : p === "Medium" ? "#793518" : "#5C736A";
 
 function KPICard({ title, value, sub, icon: Icon, color, delay }) {
   return (
@@ -33,7 +33,7 @@ function KPICard({ title, value, sub, icon: Icon, color, delay }) {
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs uppercase tracking-widest text-[#5C736A] mb-1" style={{ letterSpacing: '0.15em' }}>{title}</p>
-          <p className="text-3xl font-bold text-[#627F31]" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{value}</p>
+          <p className="text-3xl font-bold text-[#567937]" style={{ fontFamily: 'Cabinet Grotesk, sans-serif' }}>{value}</p>
           {sub && <p className="text-xs text-[#5C736A] mt-1">{sub}</p>}
         </div>
         <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: color + '18' }}>
@@ -45,7 +45,7 @@ function KPICard({ title, value, sub, icon: Icon, color, delay }) {
 }
 
 function ScoreBadge({ score }) {
-  const color = score >= 70 ? "#627F31" : score >= 40 ? "#B85C38" : "#5C736A";
+  const color = score >= 70 ? "#567937" : score >= 40 ? "#793518" : "#5C736A";
   const bg = score >= 70 ? "rgba(98,127,49,0.08)" : score >= 40 ? "rgba(184,92,56,0.08)" : "rgba(92,115,106,0.08)";
   return (
     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold"
@@ -92,7 +92,7 @@ export default function Dashboard() {
   const statusData = (stats?.status_distribution || []);
 
   return (
-    <div className="p-6 min-h-screen" style={{ backgroundColor: "#F8F9F6" }}>
+    <div className="p-6 min-h-screen" style={{ backgroundColor: "#F7F4EC" }}>
       {/* Header */}
       <div className="mb-6 animate-fade-in">
         <div className="flex items-center justify-between">
@@ -100,7 +100,7 @@ export default function Dashboard() {
             <p className="text-xs uppercase tracking-widest text-[#5C736A] mb-1" style={{ letterSpacing: '0.2em' }}>
               HORECA Lead Intelligence
             </p>
-            <h1 className="text-2xl font-bold text-[#627F31]" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+            <h1 className="text-2xl font-bold text-[#567937]" style={{ fontFamily: 'Cabinet Grotesk, sans-serif' }}>
               Sales Dashboard
             </h1>
           </div>
@@ -108,7 +108,7 @@ export default function Dashboard() {
             data-testid="discover-leads-btn"
             onClick={() => navigate("/discover")}
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-medium transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#662B01" }}
+            style={{ backgroundColor: "#793518" }}
           >
             <Zap size={15} /> Discover New Leads
           </button>
@@ -117,8 +117,8 @@ export default function Dashboard() {
 
       {/* KPI Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <KPICard title="Total Leads" value={stats?.total_leads || 0} sub="Across all cities" icon={Users} color="#627F31" delay={1} />
-        <KPICard title="High Priority" value={stats?.high_priority || 0} sub="Score ≥ 70" icon={Trophy} color="#B85C38" delay={2} />
+        <KPICard title="Total Leads" value={stats?.total_leads || 0} sub="Across all cities" icon={Users} color="#567937" delay={1} />
+        <KPICard title="High Priority" value={stats?.high_priority || 0} sub="Score ≥ 70" icon={Trophy} color="#793518" delay={2} />
         <KPICard title="New This Week" value={stats?.new_this_week || 0} sub="Last 7 days" icon={TrendingUp} color="#3D6B56" delay={3} />
         <KPICard title="Conversion Rate" value={`${stats?.conversion_rate || 0}%`} sub={`${stats?.converted || 0} converted`} icon={Star} color="#6B8A7A" delay={4} />
       </div>
@@ -135,9 +135,9 @@ export default function Dashboard() {
               <YAxis tick={{ fontSize: 11, fill: '#5C736A' }} axisLine={false} tickLine={false} />
               <Tooltip
                 contentStyle={{ backgroundColor: '#fff', border: '1px solid #DCE1D9', borderRadius: 6, fontSize: 12 }}
-                cursor={{ fill: 'rgba(98,127,49,0.04)' }}
+                cursor={{ fill: 'rgba(20,54,40,0.04)' }}
               />
-              <Bar dataKey="count" fill="#627F31" radius={[3, 3, 0, 0]} name="Leads" />
+              <Bar dataKey="count" fill="#567937" radius={[3, 3, 0, 0]} name="Leads" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -173,7 +173,7 @@ export default function Dashboard() {
             <button
               data-testid="view-all-leads-btn"
               onClick={() => navigate("/leads")}
-              className="flex items-center gap-1 text-xs text-[#627F31] hover:opacity-70 font-medium"
+              className="flex items-center gap-1 text-xs text-[#567937] hover:opacity-70 font-medium"
             >
               View All <ArrowRight size={12} />
             </button>

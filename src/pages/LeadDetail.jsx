@@ -6,8 +6,8 @@ import { ArrowLeft, Phone, Mail, Globe, MapPin, Star, Linkedin, Cpu, Zap, Copy, 
 const API = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 const segColor = (s) => ({
-  Hotel: "#662B01", Restaurant: "#3D6B56", Cafe: "#8FA39A",
-  Bakery: "#B85C38", CloudKitchen: "#D4956A", Catering: "#6B5E44",
+  Hotel: "#793518", Restaurant: "#3D6B56", Cafe: "#8FA39A",
+  Bakery: "#793518", CloudKitchen: "#D4956A", Catering: "#6B5E44",
   Mithai: "#A0522D", IceCream: "#C4878A",
   Beverage: "#4A7FA5", FoodProcessing: "#7B6D47", Organic: "#5A8A3C", Brewery: "#7B4F72",
 }[s] || "#5C736A");
@@ -15,7 +15,7 @@ const segColor = (s) => ({
 const STATUSES = ["new", "contacted", "qualified", "converted", "lost"];
 
 function ScoreGauge({ score }) {
-  const color = score >= 70 ? "#627F31" : score >= 40 ? "#B85C38" : "#9CA3AF";
+  const color = score >= 70 ? "#567937" : score >= 40 ? "#793518" : "#9CA3AF";
   const label = score >= 70 ? "High Priority" : score >= 40 ? "Medium Priority" : "Low Priority";
   return (
     <div className="text-center">
@@ -30,7 +30,7 @@ function ScoreGauge({ score }) {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-3xl font-bold" style={{ color, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{score}</span>
+          <span className="text-3xl font-bold" style={{ color, fontFamily: 'Cabinet Grotesk, sans-serif' }}>{score}</span>
           <span className="text-xs text-[#5C736A]">/100</span>
         </div>
       </div>
@@ -45,7 +45,7 @@ function ScoreItem({ text }) {
   return (
     <div className="flex items-center justify-between py-1.5 border-b border-[#F4F5F0] last:border-0">
       <span className="text-xs text-[#5C736A]">{parts[0].trim()}</span>
-      {pts && <span className="text-xs font-semibold text-[#627F31]">+{pts.replace(')', '')}</span>}
+      {pts && <span className="text-xs font-semibold text-[#567937]">+{pts.replace(')', '')}</span>}
     </div>
   );
 }
@@ -134,7 +134,7 @@ export default function LeadDetail() {
   const scoreItems = lead.ai_reasoning?.split(' | ') || [];
 
   return (
-    <div className="p-6 animate-fade-in" style={{ backgroundColor: "#F8F9F6", minHeight: "100vh" }}>
+    <div className="p-6 animate-fade-in" style={{ backgroundColor: "#F7F4EC", minHeight: "100vh" }}>
       {/* Header */}
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-3">
@@ -147,7 +147,7 @@ export default function LeadDetail() {
           </button>
           <div>
             <p className="text-xs uppercase tracking-widest text-[#5C736A]" style={{ letterSpacing: '0.15em' }}>Lead Detail</p>
-            <h1 className="text-xl font-bold text-[#627F31]" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+            <h1 className="text-xl font-bold text-[#567937]" style={{ fontFamily: 'Cabinet Grotesk, sans-serif' }}>
               {lead.business_name}
             </h1>
           </div>
@@ -157,7 +157,7 @@ export default function LeadDetail() {
             data-testid="lead-status-select"
             value={lead.status}
             onChange={e => handleStatusChange(e.target.value)}
-            className="border border-[#DCE1D9] rounded-md px-3 py-1.5 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+            className="border border-[#DCE1D9] rounded-md px-3 py-1.5 text-sm bg-white text-[#16221E] focus:outline-none focus:ring-1 focus:ring-[#567937]"
           >
             {STATUSES.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
           </select>
@@ -175,7 +175,7 @@ export default function LeadDetail() {
                 {lead.segment}
               </span>
               {lead.hotel_category && (
-                <span className="px-2 py-0.5 rounded text-xs bg-[#EDF0EA] text-[#627F31]">{lead.hotel_category}</span>
+                <span className="px-2 py-0.5 rounded text-xs bg-[#EDF0EA] text-[#567937]">{lead.hotel_category}</span>
               )}
               {lead.is_chain && <span className="px-2 py-0.5 rounded text-xs bg-[#EDF0EA] text-[#5C736A]">Chain</span>}
             </div>
@@ -194,19 +194,19 @@ export default function LeadDetail() {
               {lead.phone && (
                 <div className="flex items-center gap-2">
                   <Phone size={14} className="text-[#5C736A]" />
-                  <a href={`tel:${lead.phone}`} className="text-[#627F31] hover:underline">{lead.phone}</a>
+                  <a href={`tel:${lead.phone}`} className="text-[#567937] hover:underline">{lead.phone}</a>
                 </div>
               )}
               {lead.email && (
                 <div className="flex items-center gap-2">
                   <Mail size={14} className="text-[#5C736A]" />
-                  <a href={`mailto:${lead.email}`} className="text-[#627F31] hover:underline text-xs truncate">{lead.email}</a>
+                  <a href={`mailto:${lead.email}`} className="text-[#567937] hover:underline text-xs truncate">{lead.email}</a>
                 </div>
               )}
               {lead.website && (
                 <div className="flex items-center gap-2">
                   <Globe size={14} className="text-[#5C736A]" />
-                  <a href={`https://${lead.website}`} target="_blank" rel="noreferrer" className="text-[#627F31] hover:underline text-xs truncate">{lead.website}</a>
+                  <a href={`https://${lead.website}`} target="_blank" rel="noreferrer" className="text-[#567937] hover:underline text-xs truncate">{lead.website}</a>
                 </div>
               )}
             </div>
@@ -239,14 +239,14 @@ export default function LeadDetail() {
                 {[...lead.contacts].sort((a, b) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0)).map((c, idx) => (
                   <div key={c.id ?? idx} className={`space-y-2 ${idx > 0 ? "pt-3 border-t border-[#F4F5F0]" : ""}`}>
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-[#EDF0EA] flex items-center justify-center text-sm font-bold text-[#627F31] flex-shrink-0">
+                      <div className="w-9 h-9 rounded-full bg-[#EDF0EA] flex items-center justify-center text-sm font-bold text-[#567937] flex-shrink-0">
                         {c.name?.charAt(0)?.toUpperCase()}
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <p className="font-medium text-sm text-[#16221E]">{c.name}</p>
                           {c.is_primary && (
-                            <span className="text-xs px-1.5 py-0.5 rounded bg-[#627F31]/10 text-[#627F31] font-medium">Primary</span>
+                            <span className="text-xs px-1.5 py-0.5 rounded bg-[#567937]/10 text-[#567937] font-medium">Primary</span>
                           )}
                         </div>
                         {c.role && <p className="text-xs text-[#5C736A]">{c.role}</p>}
@@ -257,7 +257,7 @@ export default function LeadDetail() {
                       {c.email && (
                         <div className="flex items-center gap-1.5">
                           <Mail size={12} className="text-[#5C736A] flex-shrink-0" />
-                          <a href={`mailto:${c.email}`} className="text-xs text-[#627F31] hover:underline truncate">{c.email}</a>
+                          <a href={`mailto:${c.email}`} className="text-xs text-[#567937] hover:underline truncate">{c.email}</a>
                         </div>
                       )}
                       {c.email_2 && (
@@ -269,7 +269,7 @@ export default function LeadDetail() {
                       {c.phone && (
                         <div className="flex items-center gap-1.5">
                           <Phone size={12} className="text-[#5C736A] flex-shrink-0" />
-                          <a href={`tel:${c.phone}`} className="text-xs text-[#627F31] hover:underline">{c.phone}</a>
+                          <a href={`tel:${c.phone}`} className="text-xs text-[#567937] hover:underline">{c.phone}</a>
                         </div>
                       )}
                       {c.phone_2 && (
@@ -283,7 +283,7 @@ export default function LeadDetail() {
                           href={c.linkedin_url.startsWith('http') ? c.linkedin_url : `https://${c.linkedin_url}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex items-center gap-1.5 text-xs text-[#627F31] hover:opacity-70"
+                          className="flex items-center gap-1.5 text-xs text-[#567937] hover:opacity-70"
                         >
                           <Linkedin size={12} /> LinkedIn Profile
                         </a>
@@ -299,17 +299,17 @@ export default function LeadDetail() {
 
           {/* Volume estimate */}
           {lead.monthly_volume_estimate && (
-            <div className="bg-[#627F31] rounded-xl p-4 text-white">
+            <div className="bg-[#567937] rounded-xl p-4 text-white">
               <p className="text-xs uppercase tracking-widest text-white/50 mb-1" style={{ letterSpacing: '0.15em' }}>Est. Monthly Volume</p>
-              <p className="text-xl font-bold" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{lead.monthly_volume_estimate}</p>
+              <p className="text-xl font-bold" style={{ fontFamily: 'Cabinet Grotesk, sans-serif' }}>{lead.monthly_volume_estimate}</p>
               <p className="text-xs text-white/50 mt-1">Sugar/sweetener consumption</p>
             </div>
           )}
 
           {lead.has_dessert_menu && (
-            <div className="bg-[#B85C38]/10 border border-[#B85C38]/20 rounded-xl p-3">
-              <p className="text-xs font-semibold text-[#B85C38]">Has Dessert/Sweet Menu</p>
-              <p className="text-xs text-[#B85C38]/70 mt-0.5">High sugar consumption potential</p>
+            <div className="bg-[#793518]/10 border border-[#793518]/20 rounded-xl p-3">
+              <p className="text-xs font-semibold text-[#793518]">Has Dessert/Sweet Menu</p>
+              <p className="text-xs text-[#793518]/70 mt-0.5">High sugar consumption potential</p>
             </div>
           )}
         </div>
@@ -332,7 +332,7 @@ export default function LeadDetail() {
               onClick={handleQualify}
               disabled={qualifying}
               className="w-full mt-4 flex items-center justify-center gap-2 py-2.5 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: "#B85C38" }}
+              style={{ backgroundColor: "#793518" }}
             >
               {qualifying ? (
                 <><RefreshCw size={15} className="animate-spin" /> Qualifying with AI...</>
@@ -344,8 +344,8 @@ export default function LeadDetail() {
 
           {/* AI Analysis Result */}
           {aiAnalysis && (
-            <div className="bg-white border border-[#627F31]/20 rounded-xl p-4 animate-fade-in" data-testid="ai-analysis-result">
-              <p className="text-xs uppercase tracking-widest text-[#627F31] mb-3" style={{ letterSpacing: '0.15em' }}>AI Analysis</p>
+            <div className="bg-white border border-[#567937]/20 rounded-xl p-4 animate-fade-in" data-testid="ai-analysis-result">
+              <p className="text-xs uppercase tracking-widest text-[#567937] mb-3" style={{ letterSpacing: '0.15em' }}>AI Analysis</p>
               <p className="text-sm text-[#16221E] mb-3">{aiAnalysis.qualification_summary}</p>
               {aiAnalysis.sugar_use_cases?.length > 0 && (
                 <div className="mb-3">
@@ -353,7 +353,7 @@ export default function LeadDetail() {
                   <ul className="space-y-1">
                     {aiAnalysis.sugar_use_cases.map((uc, i) => (
                       <li key={i} className="flex items-start gap-1.5 text-xs text-[#5C736A]">
-                        <span className="text-[#B85C38] mt-0.5">•</span> {uc}
+                        <span className="text-[#793518] mt-0.5">•</span> {uc}
                       </li>
                     ))}
                   </ul>
@@ -361,7 +361,7 @@ export default function LeadDetail() {
               )}
               {aiAnalysis.key_insight && (
                 <div className="bg-[#EDF0EA] rounded-lg p-3">
-                  <p className="text-xs font-semibold text-[#627F31] mb-0.5">Key Insight</p>
+                  <p className="text-xs font-semibold text-[#567937] mb-0.5">Key Insight</p>
                   <p className="text-xs text-[#5C736A]">{aiAnalysis.key_insight}</p>
                 </div>
               )}
@@ -392,7 +392,7 @@ export default function LeadDetail() {
               onClick={handleGenerateEmail}
               disabled={generating}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-white text-sm font-medium disabled:opacity-60 hover:opacity-90 transition-opacity mb-4"
-              style={{ backgroundColor: generating ? "#5C736A" : "#B85C38" }}
+              style={{ backgroundColor: generating ? "#5C736A" : "#793518" }}
             >
               {generating ? (
                 <><RefreshCw size={15} className="animate-spin" /> Generating Email...</>
@@ -414,7 +414,7 @@ export default function LeadDetail() {
                     key={email.id}
                     data-testid={`email-item-${i}`}
                     onClick={() => setActiveEmail(email)}
-                    className={`w-full text-left p-3 rounded-lg border transition-colors ${activeEmail?.id === email.id ? "border-[#627F31] bg-[#627F31]/5" : "border-[#DCE1D9] hover:bg-[#F8F9F6]"}`}
+                    className={`w-full text-left p-3 rounded-lg border transition-colors ${activeEmail?.id === email.id ? "border-[#567937] bg-[#567937]/5" : "border-[#DCE1D9] hover:bg-[#F7F4EC]"}`}
                   >
                     <p className="text-xs font-medium text-[#16221E] truncate">{email.subject || "No subject"}</p>
                     <div className="flex items-center justify-between mt-1">
@@ -447,7 +447,7 @@ export default function LeadDetail() {
                     <button
                       data-testid="mark-sent-btn"
                       onClick={() => markSent(activeEmail.id)}
-                      className="px-2.5 py-1 rounded-md text-xs font-medium text-white bg-[#662B01] hover:opacity-90"
+                      className="px-2.5 py-1 rounded-md text-xs font-medium text-white bg-[#793518] hover:opacity-90"
                     >
                       Mark Sent
                     </button>

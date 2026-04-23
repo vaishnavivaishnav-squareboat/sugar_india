@@ -31,13 +31,13 @@ const METRO = new Set([
   "Kolkata", "Pune", "Ahmedabad",
 ]);
 const tierLabel = (name) => {
-  if (METRO.has(name)) return { label: "Metro", bg: "#627F31", text: "#fff" };
+  if (METRO.has(name)) return { label: "Metro", bg: "#567937", text: "#fff" };
   return { label: "Tier 2", bg: "#EDF0EA", text: "#3D6B56" };
 };
 
 // ─── Priority pill ────────────────────────────────────────────────────────────
 function PriorityBadge({ value }) {
-  const color = value === 1 ? "#B85C38" : value === 2 ? "#662B01" : "#5C736A";
+  const color = value === 1 ? "#793518" : value === 2 ? "#793518" : "#5C736A";
   return (
     <span
       className="text-[10px] font-semibold px-1.5 py-0.5 rounded"
@@ -54,7 +54,7 @@ function CityRow({ city, onToggle, onDelete, onPriorityUp, onPriorityDown }) {
   return (
     <div
       className={`flex items-center gap-3 px-4 py-3 border-b border-[#EDF0EA] transition-colors ${
-        city.is_active ? "bg-white" : "bg-[#F8F9F6] opacity-60"
+        city.is_active ? "bg-white" : "bg-[#F7F4EC] opacity-60"
       }`}
     >
       {/* Active indicator */}
@@ -64,7 +64,7 @@ function CityRow({ city, onToggle, onDelete, onPriorityUp, onPriorityDown }) {
         className="flex-shrink-0 transition-transform hover:scale-110"
       >
         {city.is_active ? (
-          <CheckCircle2 size={18} className="text-[#627F31]" />
+          <CheckCircle2 size={18} className="text-[#567937]" />
         ) : (
           <XCircle size={18} className="text-[#9CA3AF]" />
         )}
@@ -96,14 +96,14 @@ function CityRow({ city, onToggle, onDelete, onPriorityUp, onPriorityDown }) {
         <button
           onClick={() => onPriorityUp(city.id, city.priority)}
           disabled={city.priority <= 1}
-          className="text-[#5C736A] hover:text-[#627F31] disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+          className="text-[#5C736A] hover:text-[#567937] disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
         >
           <ChevronUp size={14} />
         </button>
         <PriorityBadge value={city.priority} />
         <button
           onClick={() => onPriorityDown(city.id, city.priority)}
-          className="text-[#5C736A] hover:text-[#627F31] disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+          className="text-[#5C736A] hover:text-[#567937] disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
         >
           <ChevronDown size={14} />
         </button>
@@ -215,11 +215,11 @@ export function CitiesPanel({ open, onOpenChange }) {
         {/* Header */}
         <SheetHeader className="px-5 pt-5 pb-4 border-b border-[#EDF0EA] flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#627F31] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-[#567937] flex items-center justify-center">
               <Globe size={17} className="text-white" />
             </div>
             <div>
-              <SheetTitle className="text-base font-bold text-[#16221E]" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <SheetTitle className="text-base font-bold text-[#16221E]" style={{ fontFamily: "Cabinet Grotesk, sans-serif" }}>
                 Pipeline Cities
               </SheetTitle>
               <SheetDescription className="text-xs text-[#5C736A] mt-0.5">
@@ -233,8 +233,8 @@ export function CitiesPanel({ open, onOpenChange }) {
         </SheetHeader>
 
         {/* Add new city */}
-        <div className="px-5 py-4 bg-[#F8F9F6] border-b border-[#EDF0EA] flex-shrink-0">
-          <p className="text-xs font-semibold text-[#627F31] uppercase tracking-widest mb-2" style={{ letterSpacing: "0.12em" }}>
+        <div className="px-5 py-4 bg-[#F7F4EC] border-b border-[#EDF0EA] flex-shrink-0">
+          <p className="text-xs font-semibold text-[#567937] uppercase tracking-widest mb-2" style={{ letterSpacing: "0.12em" }}>
             Add City
           </p>
           <div className="flex gap-2 items-start">
@@ -247,7 +247,7 @@ export function CitiesPanel({ open, onOpenChange }) {
               />
               {newCity.state && (
                 <p className="text-[10px] text-[#5C736A] mt-1 flex items-center gap-1">
-                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#627F31]" />
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#567937]" />
                   {newCity.state}, {newCity.country}
                 </p>
               )}
@@ -256,7 +256,7 @@ export function CitiesPanel({ open, onOpenChange }) {
               onClick={handleAdd}
               disabled={!newCity.city || adding}
               className="flex items-center gap-1.5 px-3 py-2 rounded-md text-white text-sm font-medium disabled:opacity-50 transition-opacity hover:opacity-90 flex-shrink-0"
-              style={{ backgroundColor: "#662B01" }}
+              style={{ backgroundColor: "#793518" }}
             >
               <Plus size={15} />
               {adding ? "Adding…" : "Add"}
@@ -286,7 +286,7 @@ export function CitiesPanel({ open, onOpenChange }) {
               {/* Active */}
               {sorted.filter((c) => c.is_active).length > 0 && (
                 <div>
-                  <p className="px-4 py-2 text-[10px] uppercase tracking-widest font-semibold text-[#5C736A] bg-[#F8F9F6] border-b border-[#EDF0EA]"
+                  <p className="px-4 py-2 text-[10px] uppercase tracking-widest font-semibold text-[#5C736A] bg-[#F7F4EC] border-b border-[#EDF0EA]"
                     style={{ letterSpacing: "0.12em" }}>
                     Active — processed by pipeline
                   </p>
@@ -306,7 +306,7 @@ export function CitiesPanel({ open, onOpenChange }) {
               {/* Inactive */}
               {sorted.filter((c) => !c.is_active).length > 0 && (
                 <div>
-                  <p className="px-4 py-2 text-[10px] uppercase tracking-widest font-semibold text-[#5C736A] bg-[#F8F9F6] border-b border-[#EDF0EA]"
+                  <p className="px-4 py-2 text-[10px] uppercase tracking-widest font-semibold text-[#5C736A] bg-[#F7F4EC] border-b border-[#EDF0EA]"
                     style={{ letterSpacing: "0.12em" }}>
                     Paused
                   </p>
@@ -327,7 +327,7 @@ export function CitiesPanel({ open, onOpenChange }) {
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-[#EDF0EA] flex-shrink-0 bg-[#F8F9F6]">
+        <div className="px-5 py-3 border-t border-[#EDF0EA] flex-shrink-0 bg-[#F7F4EC]">
           <p className="text-[10px] text-[#9CA3AF] text-center leading-relaxed">
             Priority P1 → processed first · Toggle ✓ to pause without deleting
           </p>

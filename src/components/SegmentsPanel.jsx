@@ -44,15 +44,15 @@ const CLUSTERS = [
 
 // ─── Colour swatches the admin can pick ──────────────────────────────────────
 const COLOR_SWATCHES = [
-  "#A0522D", "#B85C38", "#662B01", "#D4956A",
+  "#A0522D", "#793518", "#793518", "#D4956A",
   "#7B6D47", "#C4878A", "#4A7FA5", "#3D6B56",
-  "#627F31", "#5A8A3C", "#7B4F72", "#5C736A",
+  "#567937", "#5A8A3C", "#7B4F72", "#5C736A",
 ];
 
 // ─── Cluster colour map ───────────────────────────────────────────────────────
 const CLUSTER_COLORS = {
   "Traditional Sweets":    { bg: "#FDF0E8", text: "#A0522D", border: "#E8C4A0" },
-  "Bakery & Confectionery":{ bg: "#FEF3EE", text: "#B85C38", border: "#EEC4B0" },
+  "Bakery & Confectionery":{ bg: "#FEF3EE", text: "#793518", border: "#EEC4B0" },
   "Food Processing":       { bg: "#F5F3EE", text: "#7B6D47", border: "#C8BFA0" },
   "Dairy & Frozen":        { bg: "#FDF0F2", text: "#C4878A", border: "#EEC0C4" },
   "Beverage":              { bg: "#EEF4F9", text: "#4A7FA5", border: "#A8C4DC" },
@@ -74,7 +74,7 @@ function ClusterBadge({ cluster }) {
 
 // ─── Priority pill ────────────────────────────────────────────────────────────
 function PriorityBadge({ value }) {
-  const color = value === 1 ? "#B85C38" : value === 2 ? "#662B01" : "#5C736A";
+  const color = value === 1 ? "#793518" : value === 2 ? "#793518" : "#5C736A";
   return (
     <span
       className="text-[10px] font-semibold px-1.5 py-0.5 rounded"
@@ -90,7 +90,7 @@ function SegmentRow({ seg, onToggle, onPriorityUp, onPriorityDown, onDelete }) {
   return (
     <div
       className={`flex items-center gap-3 px-4 py-3 border-b border-[#EDF0EA] transition-colors ${
-        seg.is_active ? "bg-white" : "bg-[#F8F9F6] opacity-60"
+        seg.is_active ? "bg-white" : "bg-[#F7F4EC] opacity-60"
       }`}
     >
       {/* Active toggle */}
@@ -100,7 +100,7 @@ function SegmentRow({ seg, onToggle, onPriorityUp, onPriorityDown, onDelete }) {
         className="flex-shrink-0 transition-transform hover:scale-110"
       >
         {seg.is_active ? (
-          <CheckCircle2 size={18} className="text-[#627F31]" />
+          <CheckCircle2 size={18} className="text-[#567937]" />
         ) : (
           <XCircle size={18} className="text-[#9CA3AF]" />
         )}
@@ -128,14 +128,14 @@ function SegmentRow({ seg, onToggle, onPriorityUp, onPriorityDown, onDelete }) {
         <button
           onClick={() => onPriorityUp(seg.id, seg.priority)}
           disabled={seg.priority <= 1}
-          className="text-[#5C736A] hover:text-[#627F31] disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+          className="text-[#5C736A] hover:text-[#567937] disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
         >
           <ChevronUp size={14} />
         </button>
         <PriorityBadge value={seg.priority} />
         <button
           onClick={() => onPriorityDown(seg.id, seg.priority)}
-          className="text-[#5C736A] hover:text-[#627F31] transition-colors"
+          className="text-[#5C736A] hover:text-[#567937] transition-colors"
         >
           <ChevronDown size={14} />
         </button>
@@ -154,7 +154,7 @@ function SegmentRow({ seg, onToggle, onPriorityUp, onPriorityDown, onDelete }) {
 }
 
 // ─── Add custom segment form ──────────────────────────────────────────────────
-const BLANK = { label: "", key: "", cluster: "HORECA", color: "#627F31", description: "" };
+const BLANK = { label: "", key: "", cluster: "HORECA", color: "#567937", description: "" };
 
 function toKey(label) {
   // Turn "My Segment" → "MySegment" (PascalCase, alphanumeric only)
@@ -198,9 +198,9 @@ function AddSegmentForm({ onAdd }) {
       {/* Toggle header */}
       <button
         onClick={() => { setOpen((o) => !o); setError(""); }}
-        className="w-full flex items-center justify-between px-5 py-3 bg-[#F8F9F6] hover:bg-[#EDF0EA] transition-colors"
+        className="w-full flex items-center justify-between px-5 py-3 bg-[#F7F4EC] hover:bg-[#EDF0EA] transition-colors"
       >
-        <span className="flex items-center gap-2 text-xs font-semibold text-[#627F31] uppercase tracking-widest" style={{ letterSpacing: "0.12em" }}>
+        <span className="flex items-center gap-2 text-xs font-semibold text-[#567937] uppercase tracking-widest" style={{ letterSpacing: "0.12em" }}>
           <Plus size={13} />
           Add Custom Segment
         </span>
@@ -216,7 +216,7 @@ function AddSegmentForm({ onAdd }) {
               value={form.label}
               onChange={(e) => handleLabelChange(e.target.value)}
               placeholder="e.g. Confectionery"
-              className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm text-[#16221E] bg-white focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+              className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm text-[#16221E] bg-white focus:outline-none focus:ring-1 focus:ring-[#567937]"
             />
           </div>
 
@@ -229,7 +229,7 @@ function AddSegmentForm({ onAdd }) {
               value={form.key}
               onChange={(e) => set("key", e.target.value.replace(/\s/g, ""))}
               placeholder="Confectionery"
-              className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm font-mono text-[#16221E] bg-white focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+              className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm font-mono text-[#16221E] bg-white focus:outline-none focus:ring-1 focus:ring-[#567937]"
             />
           </div>
 
@@ -240,7 +240,7 @@ function AddSegmentForm({ onAdd }) {
               <select
                 value={form.cluster}
                 onChange={(e) => set("cluster", e.target.value)}
-                className="w-full border border-[#DCE1D9] rounded-md px-2 py-2 text-xs text-[#16221E] bg-white focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+                className="w-full border border-[#DCE1D9] rounded-md px-2 py-2 text-xs text-[#16221E] bg-white focus:outline-none focus:ring-1 focus:ring-[#567937]"
               >
                 {CLUSTERS.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -272,7 +272,7 @@ function AddSegmentForm({ onAdd }) {
               value={form.description}
               onChange={(e) => set("description", e.target.value)}
               placeholder="Brief description of this segment…"
-              className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm text-[#16221E] bg-white focus:outline-none focus:ring-1 focus:ring-[#627F31]"
+              className="w-full border border-[#DCE1D9] rounded-md px-3 py-2 text-sm text-[#16221E] bg-white focus:outline-none focus:ring-1 focus:ring-[#567937]"
             />
           </div>
 
@@ -289,7 +289,7 @@ function AddSegmentForm({ onAdd }) {
             <div className="flex gap-2">
               <button
                 onClick={() => { setOpen(false); setForm(BLANK); setError(""); }}
-                className="px-3 py-1.5 rounded-md text-xs text-[#5C736A] border border-[#DCE1D9] hover:bg-[#F8F9F6] transition-colors"
+                className="px-3 py-1.5 rounded-md text-xs text-[#5C736A] border border-[#DCE1D9] hover:bg-[#F7F4EC] transition-colors"
               >
                 Cancel
               </button>
@@ -297,7 +297,7 @@ function AddSegmentForm({ onAdd }) {
                 onClick={handleAdd}
                 disabled={!form.label.trim() || !form.key.trim() || adding}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-md text-white text-xs font-medium disabled:opacity-50 hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: "#662B01" }}
+                style={{ backgroundColor: "#793518" }}
               >
                 <Plus size={12} />
                 {adding ? "Adding…" : "Add Segment"}
@@ -405,13 +405,13 @@ export function SegmentsPanel({ open, onOpenChange }) {
         <SheetHeader className="px-5 pt-5 pb-4 border-b border-[#EDF0EA] flex-shrink-0">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-[#627F31] flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-[#567937] flex items-center justify-center">
                 <Layers size={17} className="text-white" />
               </div>
               <div>
                 <SheetTitle
                   className="text-base font-bold text-[#16221E]"
-                  style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}
+                  style={{ fontFamily: "Cabinet Grotesk, sans-serif" }}
                 >
                   Pipeline Segments
                 </SheetTitle>
@@ -458,7 +458,7 @@ export function SegmentsPanel({ open, onOpenChange }) {
                   onClick={handleSeed}
                   disabled={seeding}
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-white text-sm font-medium disabled:opacity-50 hover:opacity-90"
-                  style={{ backgroundColor: "#662B01" }}
+                  style={{ backgroundColor: "#793518" }}
                 >
                   <RefreshCw size={14} className={seeding ? "animate-spin" : ""} />
                   {seeding ? "Loading…" : "Load All Segments"}
@@ -471,7 +471,7 @@ export function SegmentsPanel({ open, onOpenChange }) {
               {sorted.filter((s) => s.is_active).length > 0 && (
                 <div>
                   <p
-                    className="px-4 py-2 text-[10px] uppercase tracking-widest font-semibold text-[#5C736A] bg-[#F8F9F6] border-b border-[#EDF0EA]"
+                    className="px-4 py-2 text-[10px] uppercase tracking-widest font-semibold text-[#5C736A] bg-[#F7F4EC] border-b border-[#EDF0EA]"
                     style={{ letterSpacing: "0.12em" }}
                   >
                     Active — included in pipeline discovery
@@ -493,7 +493,7 @@ export function SegmentsPanel({ open, onOpenChange }) {
               {sorted.filter((s) => !s.is_active).length > 0 && (
                 <div>
                   <p
-                    className="px-4 py-2 text-[10px] uppercase tracking-widest font-semibold text-[#5C736A] bg-[#F8F9F6] border-b border-[#EDF0EA]"
+                    className="px-4 py-2 text-[10px] uppercase tracking-widest font-semibold text-[#5C736A] bg-[#F7F4EC] border-b border-[#EDF0EA]"
                     style={{ letterSpacing: "0.12em" }}
                   >
                     Paused
@@ -515,7 +515,7 @@ export function SegmentsPanel({ open, onOpenChange }) {
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-[#EDF0EA] flex-shrink-0 bg-[#F8F9F6]">
+        <div className="px-5 py-3 border-t border-[#EDF0EA] flex-shrink-0 bg-[#F7F4EC]">
           <p className="text-[10px] text-[#9CA3AF] text-center leading-relaxed">
             Priority P1 → discovered first · Toggle ✓ to pause · 🗑 to remove
           </p>
